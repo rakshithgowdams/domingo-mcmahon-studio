@@ -83,6 +83,10 @@ export const Hero = ({ ready }: HeroProps) => {
         alt="Domingo McMahon, fashion designer in embroidered denim jacket holding a green ceramic vase"
         width={1080}
         height={1920}
+        loading="eager"
+        decoding="async"
+        // @ts-expect-error - fetchpriority is a valid HTML attribute
+        fetchpriority="high"
         className="absolute inset-0 h-full w-full object-cover will-change-transform"
       />
       <div className="absolute inset-0 bg-foreground/15" />
