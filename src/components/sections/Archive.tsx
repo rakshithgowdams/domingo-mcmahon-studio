@@ -169,6 +169,7 @@ export const Archive = () => {
                 src={current.image}
                 alt={current.alt}
                 loading="lazy"
+                decoding="async"
                 className="absolute inset-0 h-full w-full object-cover"
               />
               <img
@@ -176,9 +177,16 @@ export const Archive = () => {
                 src={current.image}
                 alt=""
                 aria-hidden="true"
+                decoding="async"
                 className="absolute inset-0 h-full w-full object-cover"
                 style={{ clipPath: "inset(100% 0 0 0)", opacity: 0 }}
               />
+              {/* Hidden preloaders so tab swaps don't wait on the network */}
+              <div aria-hidden="true" className="hidden">
+                {services.map((s) => (
+                  <img key={s.n} src={s.image} alt="" decoding="async" loading="eager" />
+                ))}
+              </div>
               {/* Floating active-index badge */}
               <div className="pointer-events-none absolute left-4 top-4 flex items-center gap-2 rounded-full bg-foreground/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-background">
                 <span>0{current.n}</span>
