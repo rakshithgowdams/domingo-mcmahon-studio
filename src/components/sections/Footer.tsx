@@ -153,7 +153,14 @@ export const Footer = () => {
         {/* Stage 2F: removed loose pink/orange decoratives — covered by placed Stars N/O */}
 
         <div className="relative">
-          <Asterisk color="blue" size={56} className="absolute -left-2 top-2" />
+          {/* Star O — blue, overlapping the S of SILHOUETTE */}
+          <BrandStar
+            color="blue"
+            size={65}
+            initialRotation={15}
+            className="absolute z-10"
+            style={{ bottom: "22%", left: "8%" }}
+          />
           <h2
             ref={headlineRef}
             className="display text-accent-forest"
