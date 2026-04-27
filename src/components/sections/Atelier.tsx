@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
-import { Asterisk } from "@/components/ui/Asterisk";
+import { BrandStar } from "@/components/ui/BrandStar";
 import { PillTag } from "@/components/ui/PillTag";
 import { useSplitText } from "@/hooks/useSplitText";
 import blog1 from "@/assets/blog-1.jpg";
@@ -61,8 +61,33 @@ export const Atelier = () => {
 
   return (
     <section ref={sectionRef} className="relative bg-surface-warm py-24 md:py-32">
-      <Asterisk color="pink" size={26} className="absolute left-1/2 top-12" />
-      <Asterisk color="blue" size={20} className="absolute bottom-20 right-12 hidden md:block" />
+      {/* Stage 2F: removed loose decoratives in favor of placed Stars I/J/K */}
+
+      {/* Star I — lime, top-left */}
+      <BrandStar
+        color="lime"
+        size={55}
+        initialRotation={10}
+        className="absolute z-10"
+        style={{ top: "15%", left: "4%" }}
+      />
+      {/* Star J — orange, mid, parallax */}
+      <BrandStar
+        color="orange"
+        size={70}
+        initialRotation={-15}
+        parallaxSpeed={0.4}
+        className="absolute z-10"
+        style={{ top: "42%", left: "48%" }}
+      />
+      {/* Star K — lime, bottom-left */}
+      <BrandStar
+        color="lime"
+        size={45}
+        initialRotation={20}
+        className="absolute z-10"
+        style={{ bottom: "12%", left: "14%" }}
+      />
 
       <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:px-10 lg:grid-cols-12">
         <div className="relative lg:col-span-5">
