@@ -149,7 +149,7 @@ export const Footer = () => {
       </div>
 
       {/* Right white column */}
-      <div className="relative flex flex-col justify-between bg-background p-8 lg:col-span-7 lg:p-10">
+      <div className="relative flex flex-col justify-between bg-background px-6 py-10 md:px-10 lg:col-span-7 lg:py-12">
         {/* Stage 2F: removed loose pink/orange decoratives — covered by placed Stars N/O */}
 
         <div className="relative">
