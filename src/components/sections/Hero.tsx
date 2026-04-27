@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import SplitType from "split-type";
 import { BrandStar } from "@/components/ui/BrandStar";
 import heroImg from "@/assets/hero-designer.jpg";
@@ -17,31 +17,40 @@ export const Hero = ({ ready }: HeroProps) => {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const photoRef = useRef<HTMLImageElement>(null);
 
-  // Character reveal on ready
-  useEffect(() => {
-    if (!ready || !headlineRef.current) return;
-    const split = new SplitType(headlineRef.current, { types: "chars,words" });
-    if (!split.chars) return;
-    gsap.set(split.chars, { yPercent: 110, opacity: 0 });
-    const tween = gsap.to(split.chars, {
-      yPercent: 0,
-      opacity: 1,
-      duration: 1,
-      stagger: 0.035,
-      ease: "power4.out",
-      delay: 0.1,
-    });
-    return () => {
-      tween.kill();
-      split.revert();
-    };
-  }, [ready]);
+  // Character reveal — runs through useGSAP's GSAP context so the tween
+  // and the SplitType instance are auto-killed if `ready` toggles or the
+  // component unmounts mid-animation (prevents orphaned chars on remount).
+  useGSAP(
+    () => {
+      if (!ready || !headlineRef.current) return;
+      if (prefersReducedMotion()) return;
 
-  // Pinned hero exit + parallax
+      const split = new SplitType(headlineRef.current, { types: "chars,words" });
+      if (!split.chars) return;
+
+      gsap.set(split.chars, { yPercent: 110, opacity: 0 });
+      gsap.to(split.chars, {
+        yPercent: 0,
+        opacity: 1,
+        duration: 1,
+        stagger: 0.035,
+        ease: "power4.out",
+        delay: 0.1,
+      });
+
+      // useGSAP returns this cleanup; SplitType DOM is reverted on unmount/dep change.
+      return () => split.revert();
+    },
+    { dependencies: [ready], scope: sectionRef },
+  );
+
+  // Pinned hero exit + parallax — scrubbed, so reduced-motion users get a
+  // static hero (no scrub jank).
   useGSAP(
     () => {
       if (!sectionRef.current) return;
-      // Photo zoom on scroll
+      if (prefersReducedMotion()) return;
+
       gsap.fromTo(
         photoRef.current,
         { scale: 1 },
@@ -49,19 +58,21 @@ export const Hero = ({ ready }: HeroProps) => {
           scale: 1.15,
           ease: "none",
           scrollTrigger: {
+            id: "hero-photo-zoom",
             trigger: sectionRef.current,
             start: "top top",
             end: "bottom top",
             scrub: true,
           },
-        }
+        },
       );
-      // Headline lift + fade as section exits
+
       gsap.to(headlineRef.current, {
         yPercent: -30,
         opacity: 0.4,
         ease: "none",
         scrollTrigger: {
+          id: "hero-headline-exit",
           trigger: sectionRef.current,
           start: "top top",
           end: "bottom 30%",
@@ -69,7 +80,7 @@ export const Hero = ({ ready }: HeroProps) => {
         },
       });
     },
-    { scope: sectionRef }
+    { scope: sectionRef },
   );
 
   return (

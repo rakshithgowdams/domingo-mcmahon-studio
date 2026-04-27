@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { BrandStar } from "@/components/ui/BrandStar";
 import { PillTag } from "@/components/ui/PillTag";
 import work1 from "@/assets/work-1.jpg";
@@ -31,6 +31,7 @@ export const WorkStrip = () => {
       const section = sectionRef.current;
       const track = trackRef.current;
       if (!section || !track) return;
+      if (prefersReducedMotion()) return;
 
       const mm = gsap.matchMedia();
 
@@ -46,16 +47,15 @@ export const WorkStrip = () => {
           return Math.max(0, trackWidth - window.innerWidth);
         };
 
-        let distance = getDistance();
+        // distance computed lazily inside the ScrollTrigger config below.
 
         const tween = gsap.to(track, {
           x: () => -getDistance(),
           ease: "none",
           scrollTrigger: {
+            id: "workstrip-horizontal",
             trigger: section,
             start: "top top",
-            // Pin length matches the horizontal travel exactly — 1px scroll
-            // = 1px translate, so Lenis lerp feels 1:1 with the cards.
             end: () => `+=${getDistance()}`,
             pin: true,
             pinSpacing: true,

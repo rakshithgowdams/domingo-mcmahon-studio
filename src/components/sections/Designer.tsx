@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { BrandStar } from "@/components/ui/BrandStar";
 import { PillTag } from "@/components/ui/PillTag";
 import { MagneticButton } from "@/components/ui/MagneticButton";
@@ -14,7 +14,8 @@ export const Designer = () => {
 
   useGSAP(
     () => {
-      gsap.utils.toArray<HTMLElement>(".designer-photo").forEach((el) => {
+      if (prefersReducedMotion()) return;
+      gsap.utils.toArray<HTMLElement>(".designer-photo").forEach((el, i) => {
         gsap.fromTo(
           el,
           { clipPath: "inset(100% 0 0 0)" },
@@ -22,7 +23,7 @@ export const Designer = () => {
             clipPath: "inset(0% 0 0 0)",
             duration: 1.2,
             ease: "power3.out",
-            scrollTrigger: { trigger: el, start: "top 85%" },
+            scrollTrigger: { id: `designer-photo-${i}`, trigger: el, start: "top 85%" },
           }
         );
       });

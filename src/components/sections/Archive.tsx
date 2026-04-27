@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { BrandStar } from "@/components/ui/BrandStar";
 import { PillTag } from "@/components/ui/PillTag";
 import { useSplitText } from "@/hooks/useSplitText";
@@ -52,6 +52,7 @@ export const Archive = () => {
   useGSAP(
     () => {
       if (!photoWrapRef.current) return;
+      if (prefersReducedMotion()) return;
       gsap.fromTo(
         photoWrapRef.current,
         { clipPath: "inset(100% 0 0 0)" },
@@ -59,7 +60,7 @@ export const Archive = () => {
           clipPath: "inset(0% 0 0 0)",
           duration: 1.1,
           ease: "power3.out",
-          scrollTrigger: { trigger: photoWrapRef.current, start: "top 85%" },
+          scrollTrigger: { id: "archive-photo-reveal", trigger: photoWrapRef.current, start: "top 85%" },
         }
       );
     },
