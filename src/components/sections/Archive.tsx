@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
-import { Asterisk } from "@/components/ui/Asterisk";
+import { BrandStar } from "@/components/ui/BrandStar";
 import { PillTag } from "@/components/ui/PillTag";
 import { useSplitText } from "@/hooks/useSplitText";
 import archive1 from "@/assets/archive-1.jpg";
