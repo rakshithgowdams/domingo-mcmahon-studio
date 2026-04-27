@@ -22,15 +22,37 @@ export const Marquee = () => {
   useGSAP(() => {
     if (!trackRef.current) return;
     const track = trackRef.current;
-    const distance = track.scrollWidth / 2; // duplicated content
-    const tween = gsap.to(track, {
-      x: -distance,
-      duration: 30,
-      ease: "none",
-      repeat: -1,
-    });
+
+    let tween: gsap.core.Tween | null = null;
+    const build = () => {
+      tween?.kill();
+      // Reset transform so scrollWidth measurement isn't skewed by a
+      // mid-flight tween position.
+      gsap.set(track, { x: 0 });
+      const distance = track.scrollWidth / 2; // duplicated content
+      tween = gsap.to(track, {
+        x: -distance,
+        duration: 30,
+        ease: "none",
+        repeat: -1,
+      });
+    };
+
+    build();
+
+    // Re-measure once webfonts are ready — Anton/Bebas swap in after
+    // first paint and shift the track width, which would otherwise leave
+    // a tiny seam at the loop boundary.
+    let cancelled = false;
+    if (typeof document !== "undefined" && document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        if (!cancelled) build();
+      });
+    }
+
     return () => {
-      tween.kill();
+      cancelled = true;
+      tween?.kill();
     };
   });
 

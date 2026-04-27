@@ -44,20 +44,26 @@ export const CustomCursor = () => {
 
   if (!enabled) return null;
 
+  // Fixed 10px element scaled with transform — animating `scale` is
+  // compositor-only (no layout/paint), unlike width/height which were
+  // re-running layout on every hover transition.
+  const HOVER_SCALE = 5.6; // 10px * 5.6 ≈ 56px
+
   return (
     <motion.div
       ref={ref}
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full mix-blend-difference"
+      className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full mix-blend-difference will-change-transform"
       style={{
         x: sx,
         y: sy,
         translateX: "-50%",
         translateY: "-50%",
-        width: isHover ? 56 : 10,
-        height: isHover ? 56 : 10,
+        width: 10,
+        height: 10,
+        scale: isHover ? HOVER_SCALE : 1,
         backgroundColor: isHover ? "hsl(40 18% 95%)" : "hsl(0 0% 100%)",
-        transition: "width 0.25s ease, height 0.25s ease, background-color 0.25s ease",
+        transition: "scale 0.25s ease, background-color 0.25s ease",
       }}
     />
   );

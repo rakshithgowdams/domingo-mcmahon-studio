@@ -1,6 +1,6 @@
-import { useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 
 type AsteriskColor =
@@ -37,19 +37,23 @@ interface AsteriskProps {
  * This prevents the trigger leak that would otherwise accumulate one
  * orphaned ScrollTrigger per Asterisk instance per Strict-Mode mount.
  */
-export const Asterisk = ({
-  color = "orange",
-  size = 40,
-  spin = 8,
-  className,
-  reveal = true,
-}: AsteriskProps) => {
+export const Asterisk = forwardRef<SVGSVGElement, AsteriskProps>(function Asterisk(
+  { color = "orange", size = 40, spin = 8, className, reveal = true },
+  forwardedRef
+) {
   const ref = useRef<SVGSVGElement>(null);
+  // Expose the inner SVG to any parent that passes a ref (fixes the
+  // "Function components cannot be given refs" warning that previously
+  // fired wherever an Asterisk was used inside a SplitType / SplitText
+  // wrapper or any other ref-forwarding parent).
+  useImperativeHandle(forwardedRef, () => ref.current as SVGSVGElement, []);
 
   useGSAP(
     () => {
       const el = ref.current;
       if (!el) return;
+      // Respect the user's OS-level reduced-motion preference.
+      const reduced = prefersReducedMotion();
 
       // Idempotency guard: if a previous ScrollTrigger was somehow attached
       // to this exact element (e.g. fast HMR), kill it before creating a new
@@ -58,7 +62,7 @@ export const Asterisk = ({
         .filter((st) => st.trigger === el)
         .forEach((st) => st.kill());
 
-      if (spin > 0) {
+      if (spin > 0 && !reduced) {
         gsap.to(el, {
           rotation: 360,
           duration: spin,
@@ -69,7 +73,7 @@ export const Asterisk = ({
         });
       }
 
-      if (reveal) {
+      if (reveal && !reduced) {
         gsap.fromTo(
           el,
           { scale: 0 },
@@ -112,6 +116,6 @@ export const Asterisk = ({
         C 42 34, 47 26, 50 8 Z" />
     </svg>
   );
-};
+});
 
 export default Asterisk;

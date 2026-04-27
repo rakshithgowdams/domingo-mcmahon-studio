@@ -13,4 +13,14 @@ if (typeof window !== "undefined") {
   }
 }
 
+/**
+ * Global reduced-motion helper. Components should call this and short-circuit
+ * any non-essential tweens / infinite loops when it returns true.
+ * Spec success criterion: "Reduced motion preference respected".
+ */
+export function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined" || !window.matchMedia) return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export { gsap, ScrollTrigger, ScrollToPlugin };
