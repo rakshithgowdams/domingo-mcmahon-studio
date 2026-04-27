@@ -12,11 +12,29 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
+  // Strip console.* and debugger statements from the production bundle so
+  // dev-only warnings (JankMonitor, etc.) don't leak to end users.
+  esbuild: {
+    drop: mode === "production" ? ["console", "debugger"] : [],
+  },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
+  },
+  // Split heavy animation libs into their own chunks so they cache
+  // independently of app code on subsequent visits.
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          gsap: ["gsap", "@gsap/react"],
+          motion: ["framer-motion"],
+          lenis: ["lenis"],
+        },
+      },
+    },
   },
 }));

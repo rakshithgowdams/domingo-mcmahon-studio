@@ -3,12 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0A0A0A" />
+    <link rel="canonical" href="https://92f0a961-49e4-4754-b339-166df219b03f.lovableproject.com/" />
     <title>Domingo McMahon — Tailored for Individual Expression</title>
     <meta name="description" content="Bespoke, hand-stitched fashion and wearable art by Domingo McMahon. Custom embroidery, textile design, creative direction &amp; styling.">
     <meta name="author" content="Domingo McMahon" />
 
-    
-    
+    <!-- Inline brand background prevents the white flash before React boots
+         (preloader bg is hsl(0 0% 4%) = #0A0A0A). -->
+    <style>html,body{background:#0A0A0A;}</style>
+
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/20828777-37c8-4e09-a53d-3fc62021750a/id-preview-bc645ad2--92f0a961-49e4-4754-b339-166df219b03f.lovable.app-1777303888144.png">
 
@@ -17,6 +21,10 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preload the display headline font so the Hero's character reveal
+         doesn't reflow when Anton swaps in. Inter loads via the stylesheet. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/anton/v25/1Ptgg87LROyAm0K08i4gS7lu.woff2" />
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <meta property="og:title" content="Domingo McMahon — Tailored for Individual Expression">
   <meta name="twitter:title" content="Domingo McMahon — Tailored for Individual Expression">

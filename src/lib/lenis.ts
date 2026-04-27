@@ -3,13 +3,25 @@ import { gsap, ScrollTrigger } from "./gsap";
 
 let instance: Lenis | null = null;
 
+const MOBILE_BREAKPOINT = 768;
+
 /**
  * Create (or return) the singleton Lenis instance and wire it to GSAP's
  * ScrollTrigger so all scroll-driven animations stay in sync with the
  * smooth-scroll loop.
+ *
+ * On mobile (<768px) and on touch-only devices, we DO NOT initialize Lenis:
+ * native momentum scroll is significantly smoother than a JS-driven loop on
+ * iOS Safari and most Android browsers. Lenis on mobile causes choppy
+ * one-finger scrolling and broken `position: sticky` in some Chromium versions.
  */
-export function createLenis(): Lenis {
+export function createLenis(): Lenis | null {
   if (instance) return instance;
+  if (typeof window === "undefined") return null;
+
+  const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+  const isTouchOnly = window.matchMedia("(pointer: coarse)").matches;
+  if (isMobile || isTouchOnly) return null;
 
   instance = new Lenis({
     duration: 1.2,

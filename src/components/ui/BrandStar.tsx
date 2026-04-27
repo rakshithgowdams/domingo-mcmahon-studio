@@ -148,7 +148,10 @@ export const BrandStar = forwardRef<HTMLDivElement, BrandStarProps>(function Bra
         );
       }
 
-      if (parallaxSpeed > 0 && !reduced) {
+      // Skip parallax on mobile — scroll-linked transforms cause jank on
+      // touch devices where Lenis is also disabled.
+      const isMobile = window.innerWidth < 768;
+      if (parallaxSpeed > 0 && !reduced && !isMobile) {
         gsap.to(wrapper, {
           yPercent: -100 * parallaxSpeed,
           ease: "none",
