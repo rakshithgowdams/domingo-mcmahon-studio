@@ -1,5 +1,9 @@
-import { motion } from "framer-motion";
-import { Asterisk } from "../Asterisk";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "@/lib/gsap";
+import { Asterisk } from "@/components/ui/Asterisk";
+import { PillTag } from "@/components/ui/PillTag";
+import { useSplitText } from "@/hooks/useSplitText";
 import archive1 from "@/assets/archive-1.jpg";
 import archive2 from "@/assets/archive-2.jpg";
 import archive3 from "@/assets/archive-3.jpg";
@@ -11,8 +15,30 @@ const services = [
 ];
 
 export const Archive = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headlineRef = useSplitText<HTMLHeadingElement>({ stagger: 0.025 });
+
+  // Image clip-path reveals
+  useGSAP(
+    () => {
+      gsap.utils.toArray<HTMLElement>(".archive-photo").forEach((el) => {
+        gsap.fromTo(
+          el,
+          { clipPath: "inset(100% 0 0 0)" },
+          {
+            clipPath: "inset(0% 0 0 0)",
+            duration: 1.1,
+            ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 85%" },
+          }
+        );
+      });
+    },
+    { scope: sectionRef }
+  );
+
   return (
-    <section className="relative bg-background py-24 md:py-32">
+    <section ref={sectionRef} className="relative bg-background py-24 md:py-32">
       {/* Left vertical ribbon */}
       <div className="absolute inset-y-0 left-0 hidden w-6 bg-foreground md:block">
         <div className="vertical-rl flex h-full items-center justify-center text-[10px] font-semibold uppercase tracking-[0.3em] text-accent-yellow">
@@ -20,61 +46,43 @@ export const Archive = () => {
         </div>
       </div>
 
-      {/* Scattered hand-placed accents */}
       <Asterisk color="yellow" size={24} className="absolute right-12 top-16" />
       <Asterisk color="pink" size={32} className="absolute bottom-24 right-20 hidden md:block" />
 
       <div className="relative mx-auto max-w-[1400px] px-6 md:pl-16 md:pr-10">
         <div className="mb-10 flex items-center gap-4">
-          <span className="pill">02 The Archive</span>
+          <PillTag>02 The Archive</PillTag>
         </div>
 
         <div className="grid gap-12 lg:grid-cols-12">
           {/* Photo collage */}
           <div className="relative lg:col-span-7">
             <div className="grid grid-cols-6 gap-4">
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="col-span-3 photo"
-                style={{ transform: "rotate(-2deg)" }}
-              >
+              <div className="archive-photo col-span-3 photo" style={{ transform: "rotate(-2deg)" }}>
                 <img src={archive1} alt="Embroidered denim jacket editorial" loading="lazy" className="h-full w-full object-cover" />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="col-span-3 mt-12 photo"
-                style={{ transform: "rotate(2deg)" }}
-              >
+              </div>
+              <div className="archive-photo col-span-3 mt-12 photo" style={{ transform: "rotate(2deg)" }}>
                 <img src={archive2} alt="Bespoke tailoring with textile art" loading="lazy" className="h-full w-full object-cover" />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="col-span-4 col-start-2 photo"
-                style={{ transform: "rotate(-1deg)" }}
-              >
+              </div>
+              <div className="archive-photo col-span-4 col-start-2 photo" style={{ transform: "rotate(-1deg)" }}>
                 <img src={archive3} alt="Hand-stitched fabric texture detail" loading="lazy" className="h-full w-full object-cover" />
-              </motion.div>
+              </div>
             </div>
 
             <Asterisk color="orange" size={60} className="absolute -left-4 top-20" />
 
-            <h2 className="display mt-12 text-foreground" style={{ fontSize: "clamp(44px, 8vw, 120px)" }}>
+            <h2
+              ref={headlineRef}
+              className="display mt-12 text-foreground"
+              style={{ fontSize: "clamp(44px, 8vw, 120px)" }}
+            >
               Cultivating
               <br />
               The Surreal
               <br />
               In{" "}
               <span className="inline-block align-middle">
-                <Asterisk color="purple" size={48} spin />
+                <Asterisk color="purple" size={48} />
               </span>{" "}
               Fabric
             </h2>
@@ -101,7 +109,7 @@ export const Archive = () => {
               ))}
             </ul>
             <div className="mt-10">
-              <a href="#" className="pill">03 Service</a>
+              <PillTag>03 Service</PillTag>
             </div>
           </div>
         </div>

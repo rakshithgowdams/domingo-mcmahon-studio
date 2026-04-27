@@ -1,11 +1,37 @@
-import { Asterisk } from "../Asterisk";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "@/lib/gsap";
+import { Asterisk } from "@/components/ui/Asterisk";
+import { PillTag } from "@/components/ui/PillTag";
+import { MagneticButton } from "@/components/ui/MagneticButton";
+import { useSplitText } from "@/hooks/useSplitText";
 import portraitPurple from "@/assets/portrait-purple.jpg";
 import portraitBlue from "@/assets/portrait-blue.jpg";
 
-export const DesignerDetails = () => {
+export const Designer = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headlineRef = useSplitText<HTMLHeadingElement>({ stagger: 0.04 });
+
+  useGSAP(
+    () => {
+      gsap.utils.toArray<HTMLElement>(".designer-photo").forEach((el) => {
+        gsap.fromTo(
+          el,
+          { clipPath: "inset(100% 0 0 0)" },
+          {
+            clipPath: "inset(0% 0 0 0)",
+            duration: 1.2,
+            ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 85%" },
+          }
+        );
+      });
+    },
+    { scope: sectionRef }
+  );
+
   return (
-    <section className="relative bg-background py-24 md:py-32">
-      {/* Scattered hand-placed accents */}
+    <section ref={sectionRef} className="relative bg-background py-24 md:py-32">
       <Asterisk color="purple" size={28} className="absolute left-8 top-20" />
       <Asterisk color="blue" size={44} className="absolute right-10 top-1/3 hidden md:block" />
       <Asterisk color="lime" size={20} className="absolute bottom-16 left-1/3" />
@@ -15,16 +41,22 @@ export const DesignerDetails = () => {
         <aside className="hidden flex-col items-start gap-8 lg:col-span-2 lg:flex">
           <span className="display text-6xl text-foreground">04</span>
           <p className="vertical-rl text-[11px] font-semibold uppercase tracking-[0.3em] text-foreground">
-            Client Styling & Consulting
+            Client Styling &amp; Consulting
           </p>
-          <a href="#" className="pill-solid mt-auto">See Pricing →</a>
+          <MagneticButton variant="solid" className="mt-auto">
+            See Pricing →
+          </MagneticButton>
         </aside>
 
         {/* Center: headline + photos */}
         <div className="relative lg:col-span-6">
-          <span className="pill mb-6 inline-flex">04 About Me</span>
+          <PillTag className="mb-6">04 About Me</PillTag>
 
-          <h2 className="display relative text-foreground" style={{ fontSize: "clamp(56px, 11vw, 160px)" }}>
+          <h2
+            ref={headlineRef}
+            className="display relative text-foreground"
+            style={{ fontSize: "clamp(56px, 11vw, 160px)" }}
+          >
             Designer
             <br />
             <span className="relative inline-block pl-8 text-accent-forest md:pl-20">
@@ -36,10 +68,10 @@ export const DesignerDetails = () => {
           </h2>
 
           <div className="relative mt-12 grid grid-cols-2 gap-6">
-            <div className="photo col-start-2" style={{ transform: "rotate(3deg)" }}>
+            <div className="designer-photo photo col-start-2" style={{ transform: "rotate(3deg)" }}>
               <img src={portraitPurple} alt="Domingo in purple striped suit against sky" loading="lazy" className="h-full w-full object-cover" />
             </div>
-            <div className="photo relative col-span-2 mx-auto mt-4 max-w-md" style={{ transform: "rotate(-90deg) scale(0.9)" }}>
+            <div className="designer-photo photo relative col-span-2 mx-auto mt-4 max-w-md" style={{ transform: "rotate(-90deg) scale(0.9)" }}>
               <img src={portraitBlue} alt="Domingo in blue jacket holding daisies" loading="lazy" className="h-full w-full object-cover" />
             </div>
             <Asterisk color="orange" size={56} className="absolute -bottom-4 left-0" />
@@ -62,4 +94,4 @@ export const DesignerDetails = () => {
   );
 };
 
-export default DesignerDetails;
+export default Designer;
