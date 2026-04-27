@@ -33,23 +33,71 @@ export const WorkStrip = () => {
       if (!section || !track) return;
 
       const mm = gsap.matchMedia();
+
       mm.add("(min-width: 1024px)", () => {
-        const distance = track.scrollWidth - window.innerWidth;
+        // Compute the exact pixel distance the track must travel so the
+        // last card's right edge aligns with the viewport's right edge.
+        // Using getBoundingClientRect avoids sub-pixel rounding issues
+        // that scrollWidth can introduce, and accounts for trailing padding.
+        const getDistance = () => {
+          const trackWidth = track.scrollWidth;
+          // Distance = total track width minus what fits in the viewport.
+          // Clamp to 0 so short tracks don't produce negative pin durations.
+          return Math.max(0, trackWidth - window.innerWidth);
+        };
+
+        let distance = getDistance();
+
         const tween = gsap.to(track, {
-          x: -distance,
+          x: () => -getDistance(),
           ease: "none",
           scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: () => `+=${distance}`,
+            // Pin length matches the horizontal travel exactly — 1px scroll
+            // = 1px translate, so Lenis lerp feels 1:1 with the cards.
+            end: () => `+=${getDistance()}`,
             pin: true,
+            pinSpacing: true,
             scrub: 1,
             invalidateOnRefresh: true,
             anticipatePin: 1,
           },
         });
-        ScrollTrigger.refresh();
+
+        // Refresh once images inside the track have loaded so the measured
+        // distance is accurate. Without this, lazy-loaded images shift the
+        // scrollWidth after pin setup and the last card gets clipped.
+        const imgs = Array.from(track.querySelectorAll("img"));
+        let pending = imgs.filter((img) => !img.complete).length;
+        const onLoad = () => {
+          pending -= 1;
+          if (pending <= 0) ScrollTrigger.refresh();
+        };
+        if (pending === 0) {
+          ScrollTrigger.refresh();
+        } else {
+          imgs.forEach((img) => {
+            if (!img.complete) {
+              img.addEventListener("load", onLoad, { once: true });
+              img.addEventListener("error", onLoad, { once: true });
+            }
+          });
+        }
+
+        // Also refresh after fonts settle (display headline metrics change).
+        if (document.fonts?.ready) {
+          document.fonts.ready.then(() => ScrollTrigger.refresh());
+        }
+
+        // Resize handler — matchMedia handles breakpoint exits, but width
+        // changes within lg+ also need a refresh so distance recomputes.
+        const onResize = () => ScrollTrigger.refresh();
+        window.addEventListener("resize", onResize);
+
         return () => {
+          window.removeEventListener("resize", onResize);
+          tween.scrollTrigger?.kill();
           tween.kill();
         };
       });
@@ -76,7 +124,7 @@ export const WorkStrip = () => {
       <div className="lg:flex lg:h-full lg:items-center">
         <div
           ref={trackRef}
-          className="flex flex-col gap-8 px-6 md:px-10 lg:w-max lg:flex-row lg:gap-16 lg:pl-[15vw] lg:pr-[15vw] lg:pt-32"
+          className="flex flex-col gap-8 px-6 md:px-10 lg:w-max lg:flex-row lg:gap-16 lg:pl-[10vw] lg:pr-[10vw] lg:pt-32 lg:will-change-transform"
         >
           {projects.map((p, i) => (
             <article
@@ -87,7 +135,8 @@ export const WorkStrip = () => {
                 <img
                   src={p.img}
                   alt={p.title}
-                  loading="lazy"
+                  loading="eager"
+                  decoding="async"
                   className="h-[60vh] w-full object-cover transition-transform duration-700 group-hover:scale-105 lg:h-[600px]"
                 />
               </div>
