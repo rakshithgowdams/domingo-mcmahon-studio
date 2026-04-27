@@ -47,26 +47,29 @@ export const WorkStrip = () => {
           return Math.max(0, trackWidth - window.innerWidth);
         };
 
-        // distance computed lazily inside the ScrollTrigger config below.
+        gsap.set(track, { x: 0, force3D: true });
 
         const tween = gsap.to(track, {
           x: () => -getDistance(),
           ease: "none",
+          force3D: true,
+          overwrite: "auto",
           scrollTrigger: {
             id: "workstrip-horizontal",
             trigger: section,
-            start: "top top",
+            start: "top top+=1",
             // Longer pin distance = the same horizontal travel spread over
             // more vertical scroll, which feels like a slow editorial glide
             // instead of a snappy yank.
-            end: () => `+=${getDistance() * 1.5}`,
+            end: () => `+=${Math.max(1, getDistance()) * 1.7}`,
             pin: true,
             pinSpacing: true,
-            // scrub: 1.5 = ~1.5s of inertia catching up to the scroll head.
-            // Pairs with Lenis's lerp 0.1 for a buttery, weighted feel.
-            scrub: 1.5,
+            pinReparent: true,
+            // A longer scrub softens the catch-up and prevents mechanical snaps.
+            scrub: 1.8,
             invalidateOnRefresh: true,
-            anticipatePin: 1,
+            anticipatePin: 0.5,
+            fastScrollEnd: false,
           },
         });
 
