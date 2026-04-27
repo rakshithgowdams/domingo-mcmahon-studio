@@ -9,22 +9,25 @@ const posts = [
     img: blog1,
     tag: "Timeless Design",
     title: "Building a Timeless Wardrobe Identity",
-    desc: "A study on how restraint and ritual shape garments that outlast every season.",
-    rotate: "-3deg",
+    desc: "How quiet silhouettes and considered fabrics\nbecome the foundation of a personal style.",
+    rotate: "-4deg",
+    offsetY: "mt-0",
   },
   {
     img: blog2,
     tag: "Textile Art",
     title: "Designing for Calm: Beyond the Runway",
-    desc: "Why softness and silence belong inside the most considered tailored work.",
-    rotate: "2deg",
+    desc: "Why softness, restraint, and slowness belong\ninside the most considered tailored work.",
+    rotate: "3deg",
+    offsetY: "sm:mt-12",
   },
   {
     img: blog3,
     tag: "Slow Craft",
     title: "The Power of Restraint in Hand-Stitching",
-    desc: "Notes from the studio on patience, repetition and the discipline of one stitch.",
-    rotate: "-1deg",
+    desc: "Studio notes on patience, repetition, and the\nquiet discipline carried in every single stitch.",
+    rotate: "-2deg",
+    offsetY: "sm:-mt-6",
   },
 ];
 
@@ -60,7 +63,7 @@ export const Atelier = () => {
           <Asterisk color="orange" size={48} className="absolute -top-6 right-10 z-10" />
           <Asterisk color="yellow" size={36} className="absolute bottom-10 -left-4 z-10" />
 
-          <div className="grid gap-8 sm:grid-cols-2">
+          <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:-space-x-2">
             {posts.map((p, i) => (
               <motion.article
                 key={p.title}
@@ -68,18 +71,28 @@ export const Atelier = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className={`group rounded-lg bg-background p-3 shadow-[0_8px_30px_-12px_hsl(0_0%_0%/0.15)] transition-all duration-300 hover:-translate-y-1 ${
-                  i === 2 ? "sm:col-span-2 sm:max-w-md sm:mx-auto" : ""
-                }`}
-                style={{ transform: `rotate(${p.rotate})` }}
+                className={`group relative rounded-lg bg-background p-3 shadow-[0_12px_40px_-15px_hsl(0_0%_0%/0.25)] transition-all duration-300 hover:z-20 hover:-translate-y-2 hover:rotate-0 ${p.offsetY}`}
+                style={{ transform: `rotate(${p.rotate})`, zIndex: 10 - i }}
               >
+                {/* Pill tag overlaps the top-left of the photo (polaroid label) */}
+                <span className="pill absolute left-1 top-1 z-10 bg-background shadow-sm">
+                  {p.tag}
+                </span>
                 <div className="relative photo">
-                  <img src={p.img} alt={p.title} loading="lazy" className="h-64 w-full object-cover" />
-                  <span className="pill absolute left-3 top-3 bg-background">{p.tag}</span>
+                  <img
+                    src={p.img}
+                    alt={p.title}
+                    loading="lazy"
+                    className="h-56 w-full object-cover sm:h-64"
+                  />
                 </div>
-                <div className="px-2 pb-2 pt-4">
-                  <h3 className="display text-2xl text-foreground">{p.title}</h3>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{p.desc}</p>
+                <div className="px-2 pb-3 pt-4">
+                  <h3 className="display text-xl leading-[0.95] text-foreground sm:text-2xl">
+                    {p.title}
+                  </h3>
+                  <p className="mt-3 whitespace-pre-line text-xs leading-relaxed text-muted-foreground">
+                    {p.desc}
+                  </p>
                 </div>
               </motion.article>
             ))}
