@@ -79,7 +79,7 @@ export const Footer = () => {
   return (
     <footer className="grid grid-cols-1 lg:grid-cols-10">
       {/* Left black column */}
-      <div className="relative bg-foreground p-8 text-white lg:col-span-3 lg:p-10">
+      <div className="relative bg-foreground px-6 py-10 text-white md:px-10 lg:col-span-3 lg:py-12">
         <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/70">Follow Me On</p>
         <ul className="mt-4 space-y-1 text-base">
           {["Facebook", "Instagram", "Tik tok"].map((s) => (
@@ -149,7 +149,7 @@ export const Footer = () => {
       </div>
 
       {/* Right white column */}
-      <div className="relative flex flex-col justify-between bg-background p-8 lg:col-span-7 lg:p-10">
+      <div className="relative flex flex-col justify-between bg-background px-6 py-10 md:px-10 lg:col-span-7 lg:py-12">
         {/* Stage 2F: removed loose pink/orange decoratives — covered by placed Stars N/O */}
 
         <div className="relative">
