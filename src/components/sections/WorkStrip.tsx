@@ -53,10 +53,9 @@ export const WorkStrip = () => {
           x: () => -getDistance(),
           ease: "none",
           scrollTrigger: {
+            id: "workstrip-horizontal",
             trigger: section,
             start: "top top",
-            // Pin length matches the horizontal travel exactly — 1px scroll
-            // = 1px translate, so Lenis lerp feels 1:1 with the cards.
             end: () => `+=${getDistance()}`,
             pin: true,
             pinSpacing: true,
