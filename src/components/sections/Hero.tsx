@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Asterisk } from "./Asterisk";
+import { Asterisk } from "../Asterisk";
 import heroImg from "@/assets/hero-designer.jpg";
 
 const navItems = ["Collections", "Editorial", "Archive", "About Designer", "Contact"];
