@@ -61,6 +61,12 @@ export default function QA() {
           <span className="mx-2 h-4 w-px bg-border" />
           <h1 className="text-sm font-medium">QA Checklist</h1>
           <span className="text-xs text-muted-foreground">{visible.length} section{visible.length === 1 ? "" : "s"}</span>
+          <span
+            title="Live ScrollTrigger count — should stay flat while idle"
+            className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] text-muted-foreground"
+          >
+            ST: {stCount}
+          </span>
 
           <div className="ml-auto flex flex-wrap items-center gap-2">
             <label className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
