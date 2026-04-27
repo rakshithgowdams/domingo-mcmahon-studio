@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import SplitType from "split-type";
-import { Asterisk } from "@/components/ui/Asterisk";
+import { BrandStar } from "@/components/ui/BrandStar";
 import heroImg from "@/assets/hero-designer.jpg";
 
 const navItems = ["Collections", "Editorial", "Archive", "About Designer", "Contact"];
@@ -101,8 +101,27 @@ export const Hero = ({ ready }: HeroProps) => {
         </nav>
       </div>
 
-      {/* Decorative scattered accents */}
-      <Asterisk color="pink" size={28} className="absolute bottom-32 left-12 z-10 hidden md:block" />
+      {/* Decorative scattered accents — Stage 2F removed loose pink in favor of placed Stars A/B */}
+
+      {/* Star A — orange, top of hero */}
+      <BrandStar
+        color="orange"
+        size={120}
+        initialRotation={-15}
+        rotateSpeed={14}
+        className="absolute z-10 hidden md:block"
+        style={{ top: "18%", left: "42%" }}
+      />
+      {/* Star B — lime, lower hero */}
+      <BrandStar
+        color="lime"
+        size={90}
+        initialRotation={20}
+        rotateSpeed={10}
+        rotateDirection={-1}
+        className="absolute z-10 hidden md:block"
+        style={{ bottom: "22%", left: "48%" }}
+      />
 
       {/* Massive headline */}
       <div className="relative z-10 flex min-h-[calc(100vh-120px)] items-center px-4 md:px-6">
@@ -116,7 +135,7 @@ export const Hero = ({ ready }: HeroProps) => {
           }}
         >
           <span className="relative inline-block">
-            <Asterisk color="orange" size={56} className="absolute -left-5 -top-3 md:-left-8 md:-top-6" />
+            <BrandStar color="orange" size={56} rotate={false} popInOnScroll={false} className="absolute -left-5 -top-3 md:-left-8 md:-top-6" />
             Tailored for
           </span>
           <br />
@@ -124,7 +143,7 @@ export const Hero = ({ ready }: HeroProps) => {
           <br />
           <span className="relative inline-block">
             Expression.
-            <Asterisk color="lime" size={64} className="absolute -bottom-3 -right-8 md:-bottom-5 md:-right-12" />
+            <BrandStar color="lime" size={64} rotate={false} popInOnScroll={false} className="absolute -bottom-3 -right-8 md:-bottom-5 md:-right-12" />
           </span>
         </h1>
       </div>
