@@ -24,30 +24,33 @@ const projects = [
  */
 export const WorkStrip = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const section = sectionRef.current;
+      const viewport = viewportRef.current;
       const track = trackRef.current;
-      if (!section || !track) return;
+      if (!section || !viewport || !track) return;
       if (prefersReducedMotion()) return;
 
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 1024px)", () => {
-        // Compute the exact pixel distance the track must travel so the
-        // last card's right edge aligns with the viewport's right edge.
-        // Using getBoundingClientRect avoids sub-pixel rounding issues
-        // that scrollWidth can introduce, and accounts for trailing padding.
         const getDistance = () => {
-          const trackWidth = track.scrollWidth;
-          // Distance = total track width minus what fits in the viewport.
-          // Clamp to 0 so short tracks don't produce negative pin durations.
-          return Math.max(0, trackWidth - window.innerWidth);
+          const trackBounds = track.getBoundingClientRect();
+          const viewportBounds = viewport.getBoundingClientRect();
+          return Math.max(0, Math.ceil(trackBounds.width - viewportBounds.width));
         };
 
-        gsap.set(track, { x: 0, force3D: true });
+        const setSectionHeight = () => {
+          const distance = getDistance();
+          section.style.setProperty("--workstrip-scroll", `${window.innerHeight + distance}px`);
+        };
+
+        gsap.set(track, { x: 0, xPercent: 0, force3D: true });
+        setSectionHeight();
 
         const tween = gsap.to(track, {
           x: () => -getDistance(),
@@ -57,19 +60,16 @@ export const WorkStrip = () => {
           scrollTrigger: {
             id: "workstrip-horizontal",
             trigger: section,
-            start: "top top+=1",
-            // Longer pin distance = the same horizontal travel spread over
-            // more vertical scroll, which feels like a slow editorial glide
-            // instead of a snappy yank.
-            end: () => `+=${Math.max(1, getDistance()) * 1.7}`,
-            pin: true,
+            start: "top top",
+            end: () => `+=${Math.max(1, getDistance())}`,
+            pin: viewport,
             pinSpacing: true,
-            pinReparent: true,
-            // A longer scrub softens the catch-up and prevents mechanical snaps.
-            scrub: 1.8,
+            scrub: 0.8,
             invalidateOnRefresh: true,
-            anticipatePin: 0.5,
-            fastScrollEnd: false,
+            anticipatePin: 1,
+            fastScrollEnd: true,
+            onRefreshInit: setSectionHeight,
+            onRefresh: setSectionHeight,
           },
         });
 
@@ -100,7 +100,10 @@ export const WorkStrip = () => {
 
         // Resize handler — matchMedia handles breakpoint exits, but width
         // changes within lg+ also need a refresh so distance recomputes.
-        const onResize = () => ScrollTrigger.refresh();
+        const onResize = () => {
+          setSectionHeight();
+          ScrollTrigger.refresh();
+        };
         window.addEventListener("resize", onResize);
 
         return () => {
@@ -116,20 +119,20 @@ export const WorkStrip = () => {
   );
 
   return (
-    <section ref={sectionRef} className="relative bg-surface-warm py-20 lg:h-screen lg:overflow-hidden lg:py-0">
-      {/* Header — visible on all sizes */}
-      <div className="mx-auto flex max-w-[1400px] items-end justify-between px-6 pb-10 lg:absolute lg:left-0 lg:right-0 lg:top-10 lg:z-10 lg:pb-0 md:px-10">
-        <div>
-          <PillTag className="mb-4">04.5 Selected Work</PillTag>
-          <h2 className="display text-foreground" style={{ fontSize: "clamp(40px, 7vw, 100px)" }}>
-            The Catalogue
-          </h2>
+    <section ref={sectionRef} className="relative bg-surface-warm py-20 lg:h-[var(--workstrip-scroll,100vh)] lg:py-0">
+      <div ref={viewportRef} className="lg:flex lg:h-screen lg:overflow-hidden">
+        {/* Header — visible on all sizes */}
+        <div className="mx-auto flex max-w-[1400px] items-end justify-between px-6 pb-10 lg:absolute lg:left-0 lg:right-0 lg:top-10 lg:z-10 lg:pb-0 md:px-10">
+          <div>
+            <PillTag className="mb-4">04.5 Selected Work</PillTag>
+            <h2 className="display text-foreground" style={{ fontSize: "clamp(40px, 7vw, 100px)" }}>
+              The Catalogue
+            </h2>
+          </div>
+          <BrandStar color="lime" size={48} className="hidden md:block" popInOnScroll={false} />
         </div>
-        <BrandStar color="lime" size={48} className="hidden md:block" popInOnScroll={false} />
-      </div>
 
-      {/* Horizontal track on lg+, vertical stack on smaller screens */}
-      <div className="lg:flex lg:h-full lg:items-center">
+        {/* Horizontal track on lg+, vertical stack on smaller screens */}
         <div
           ref={trackRef}
           className="flex flex-col gap-8 px-6 md:px-10 lg:w-max lg:flex-row lg:gap-16 lg:pl-[10vw] lg:pr-[10vw] lg:pt-32 lg:will-change-transform"
