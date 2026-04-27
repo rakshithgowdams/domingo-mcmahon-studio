@@ -1,0 +1,88 @@
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "@/lib/gsap";
+import { Asterisk } from "@/components/ui/Asterisk";
+import { useSplitText } from "@/hooks/useSplitText";
+import portraitBlue from "@/assets/portrait-blue.jpg";
+
+/**
+ * CTA banner — pinned section with a white wipe revealing the black
+ * background from the bottom up; headline characters cascade in.
+ */
+export const CTABanner = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const wipeRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useSplitText<HTMLHeadingElement>({ stagger: 0.04, start: "top 70%" });
+
+  useGSAP(
+    () => {
+      if (!wipeRef.current || !sectionRef.current) return;
+      gsap.fromTo(
+        wipeRef.current,
+        { yPercent: 0 },
+        {
+          yPercent: -100,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "top 20%",
+            scrub: 1,
+          },
+        }
+      );
+    },
+    { scope: sectionRef }
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-foreground py-24 text-white md:py-40"
+    >
+      {/* White wipe overlay — drops away as section scrolls in */}
+      <div
+        ref={wipeRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[5] bg-background"
+      />
+
+      {/* Scattered hand-placed accents around the headline */}
+      <Asterisk color="yellow" size={32} className="absolute left-10 top-16 z-10" />
+      <Asterisk color="lime" size={24} className="absolute bottom-16 right-12 z-10" />
+      <Asterisk color="orange" size={20} className="absolute bottom-24 left-1/4 z-10 hidden md:block" />
+
+      <div className="relative z-10 px-4 md:px-6">
+        <h2
+          ref={headlineRef}
+          className="display text-center text-white"
+          style={{ fontSize: "clamp(64px, 14vw, 240px)", letterSpacing: "-0.045em", lineHeight: "0.85" }}
+        >
+          <span className="inline-flex flex-wrap items-center justify-center gap-x-[0.15em]">
+            Crafting
+            <span className="inline-block align-middle">
+              <Asterisk color="purple" size={72} />
+            </span>
+            Clarity
+          </span>
+          <br />
+          <span className="inline-flex flex-wrap items-center justify-center gap-x-[0.15em]">
+            From
+            <span className="inline-block h-[0.7em] w-[0.7em] overflow-hidden rounded-full align-middle">
+              <img src={portraitBlue} alt="Designer portrait" loading="lazy" className="h-full w-full object-cover" />
+            </span>
+            Complexity
+            <span className="inline-block align-middle">
+              <Asterisk color="pink" size={72} />
+            </span>
+          </span>
+        </h2>
+        <p className="mx-auto mt-10 max-w-xl text-center text-sm leading-relaxed text-white/70">
+          Hand-painted and stitched visions, brought straight from the underground studio to your wardrobe.
+        </p>
+      </div>
+    </section>
+  );
+};
+
+export default CTABanner;

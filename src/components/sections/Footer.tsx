@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Asterisk } from "../Asterisk";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "@/lib/gsap";
+import SplitType from "split-type";
+import { Asterisk } from "@/components/ui/Asterisk";
 
 type SubmitStatus = "idle" | "loading" | "success" | "error";
 
@@ -12,16 +15,9 @@ const emailSchema = z
   .max(255, "Email is too long")
   .email("Please enter a valid email");
 
-/**
- * Replace the body of this function with a real API call (edge function,
- * Mailchimp, Resend, etc.) once a backend is connected. The current
- * implementation simulates a network round-trip and randomly errors ~10%
- * of the time so both UI states stay exercised.
- */
 async function submitSubscription(email: string): Promise<void> {
   await new Promise((r) => setTimeout(r, 900));
   if (Math.random() < 0.1) throw new Error("Network error");
-  // For now, persist locally so resubmits with the same email are detected.
   const stored = JSON.parse(localStorage.getItem("dm_subscribers") ?? "[]") as string[];
   if (stored.includes(email.toLowerCase())) {
     throw new Error("You're already subscribed.");
@@ -32,19 +28,35 @@ async function submitSubscription(email: string): Promise<void> {
 export const Footer = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<SubmitStatus>("idle");
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState("");
+  const headlineRef = useRef<HTMLHeadingElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // SILHOUETTE — bounce-in character drop from above
+  useGSAP(() => {
+    if (!headlineRef.current) return;
+    const split = new SplitType(headlineRef.current, { types: "chars" });
+    if (!split.chars) return;
+    gsap.set(split.chars, { y: -150, opacity: 0 });
+    gsap.to(split.chars, {
+      y: 0,
+      opacity: 1,
+      duration: 1.1,
+      stagger: 0.05,
+      ease: "bounce.out",
+      scrollTrigger: { trigger: headlineRef.current, start: "top 85%" },
+    });
+    return () => split.revert();
+  });
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setMessage("");
-
     const parsed = emailSchema.safeParse(email);
     if (!parsed.success) {
       setStatus("error");
       setMessage(parsed.error.issues[0].message);
       return;
     }
-
     setStatus("loading");
     try {
       await submitSubscription(parsed.data);
@@ -114,8 +126,6 @@ export const Footer = () => {
               {isLoading ? "Sending…" : isSuccess ? "Subscribed ✓" : "Subscribe"}
             </button>
           </form>
-
-          {/* Inline feedback — always rendered region for screen readers */}
           <p
             id="subscribe-feedback"
             role="status"
@@ -133,13 +143,13 @@ export const Footer = () => {
 
       {/* Right white column */}
       <div className="relative flex flex-col justify-between bg-background p-8 lg:col-span-7 lg:p-10">
-        {/* Scattered hand-placed accents */}
         <Asterisk color="pink" size={28} className="absolute right-12 top-10" />
         <Asterisk color="orange" size={20} className="absolute bottom-24 left-12" />
 
         <div className="relative">
           <Asterisk color="blue" size={56} className="absolute -left-2 top-2" />
           <h2
+            ref={headlineRef}
             className="display text-accent-forest"
             style={{ fontSize: "clamp(96px, 22vw, 360px)", lineHeight: "0.82", letterSpacing: "-0.05em" }}
           >
