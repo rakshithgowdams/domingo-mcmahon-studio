@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
-import { Asterisk } from "@/components/ui/Asterisk";
+import { BrandStar } from "@/components/ui/BrandStar";
 import { PillTag } from "@/components/ui/PillTag";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useSplitText } from "@/hooks/useSplitText";
@@ -32,9 +32,33 @@ export const Designer = () => {
 
   return (
     <section ref={sectionRef} className="relative bg-background py-24 md:py-32">
-      <Asterisk color="purple" size={28} className="absolute left-8 top-20" />
-      <Asterisk color="blue" size={44} className="absolute right-10 top-1/3 hidden md:block" />
-      <Asterisk color="lime" size={20} className="absolute bottom-16 left-1/3" />
+      {/* Stage 2F: removed loose decoratives in favor of placed Stars F/G/H */}
+
+      {/* Star F — pink, top-right area */}
+      <BrandStar
+        color="pink"
+        size={65}
+        initialRotation={-20}
+        className="absolute z-10"
+        style={{ top: "25%", right: "38%" }}
+      />
+      {/* Star G — orange, lower-left center */}
+      <BrandStar
+        color="orange"
+        size={75}
+        initialRotation={15}
+        className="absolute z-10"
+        style={{ top: "62%", left: "32%" }}
+      />
+      {/* Star H — lime, bottom-left, parallax */}
+      <BrandStar
+        color="lime"
+        size={50}
+        initialRotation={0}
+        parallaxSpeed={0.2}
+        className="absolute z-10"
+        style={{ bottom: "18%", left: "8%" }}
+      />
 
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:px-10 lg:grid-cols-12">
         {/* Left vertical column */}
