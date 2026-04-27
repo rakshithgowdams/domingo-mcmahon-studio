@@ -124,7 +124,7 @@ export const WorkStrip = () => {
       <div className="lg:flex lg:h-full lg:items-center">
         <div
           ref={trackRef}
-          className="flex flex-col gap-8 px-6 md:px-10 lg:w-max lg:flex-row lg:gap-16 lg:pl-[15vw] lg:pr-[15vw] lg:pt-32"
+          className="flex flex-col gap-8 px-6 md:px-10 lg:w-max lg:flex-row lg:gap-16 lg:pl-[10vw] lg:pr-[10vw] lg:pt-32 lg:will-change-transform"
         >
           {projects.map((p, i) => (
             <article
