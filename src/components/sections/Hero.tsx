@@ -94,7 +94,7 @@ export const Hero = ({ ready }: HeroProps) => {
       {/* Top bar */}
       <div className="relative z-10 flex items-start justify-between px-6 pt-6 md:px-10 md:pt-8">
         <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white">
-          Domingo McMahon
+          Developed by @aiwithrakshith
         </span>
         <nav className="hidden flex-col items-end gap-1 text-[12px] font-medium text-white md:flex">
           {navItems.map((item) => (
