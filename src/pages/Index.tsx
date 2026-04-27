@@ -8,6 +8,7 @@ import { WorkStrip } from "@/components/sections/WorkStrip";
 import { Atelier } from "@/components/sections/Atelier";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Footer } from "@/components/sections/Footer";
+import { JankMonitor } from "@/components/qa/JankMonitor";
 import { getLenis } from "@/lib/lenis";
 import { ScrollTrigger } from "@/lib/gsap";
 
@@ -69,6 +70,9 @@ const Index = () => {
       <Atelier />
       <CTABanner />
       <Footer />
+
+      {/* Visual QA — dormant unless ?jank=1 is in the URL or "J" is pressed. */}
+      <JankMonitor />
     </main>
   );
 };
