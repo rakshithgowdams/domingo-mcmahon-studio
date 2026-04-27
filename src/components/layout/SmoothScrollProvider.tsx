@@ -17,7 +17,7 @@ export const SmoothScrollProvider = ({ children }: { children: ReactNode }) => {
 
     // Honor reduced-motion: stop Lenis (native scroll takes over).
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mql.matches) lenis.stop();
+    if (mql.matches) lenis?.stop();
 
     return () => destroyLenis();
   }, []);
