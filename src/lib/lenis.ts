@@ -19,18 +19,19 @@ export function createLenis(): Lenis | null {
   if (instance) return instance;
   if (typeof window === "undefined") return null;
 
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
+
   const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
   const isTouchOnly = window.matchMedia("(pointer: coarse)").matches;
   if (isMobile || isTouchOnly) return null;
 
   instance = new Lenis({
-    // Softer lerp = more inertia / glide. 0.1 is the Lenis sweet spot for
-    // editorial sites — high enough to feel smooth, low enough that pinned
-    // sections don't drift behind the scroll position.
-    lerp: 0.1,
+    // Pure lerp-based smoothing keeps wheel input soft without fighting GSAP.
+    // Lower values reduce sudden acceleration at pinned section boundaries.
+    lerp: 0.075,
     smoothWheel: true,
-    wheelMultiplier: 0.9,
-    touchMultiplier: 1.5,
+    wheelMultiplier: 0.8,
+    touchMultiplier: 1,
     syncTouch: false,
   });
 
@@ -45,9 +46,9 @@ export function createLenis(): Lenis | null {
   // which would otherwise cause a visible jump in pinned sections.
   gsap.ticker.lagSmoothing(0);
 
-  // Pin via transform so pinned elements ride the same compositor layer
-  // Lenis is translating — eliminates the 1-frame desync at pin boundaries.
-  ScrollTrigger.defaults({ pinType: "transform" });
+  // Let ScrollTrigger choose the correct pin type for the window scroller.
+  // Forcing transform pins on body/window scroll causes a visible jump when
+  // the horizontal strip enters or leaves its pinned state.
   // NOTE: do NOT call ScrollTrigger.normalizeScroll(true) here. It hijacks
   // wheel/touch events that Lenis is already smoothing, which produces the
   // exact "sudden glitch" the user is reporting (double-handled input).
