@@ -54,29 +54,31 @@ export const Hero = () => {
         </motion.h1>
       </div>
 
-      {/* Bottom captions */}
-      <div className="absolute inset-x-0 bottom-6 z-10 grid grid-cols-2 gap-4 px-6 text-white md:bottom-10 md:grid-cols-3 md:px-10">
+      {/* Bottom captions — left + center; right-edge tagline now lives as a vertical rail */}
+      <div className="absolute inset-x-0 bottom-6 z-10 grid grid-cols-2 gap-4 px-4 pr-12 text-white md:bottom-10 md:px-6 md:pr-24">
         <p className="text-[11px] leading-snug md:text-xs">
           Custom Embroidery, Textile Design,
           <br />
-          Creative Direction & Styling
+          Creative Direction &amp; Styling
         </p>
-        <p className="hidden text-[11px] leading-snug md:block md:text-xs">
+        <p className="text-right text-[11px] leading-snug md:text-xs">
           Welcome to My Creative
           <br />
           Archive ___________
         </p>
-        <p className="text-right text-[11px] leading-snug md:text-xs">
-          Exploring Art Through the
-          <br />
-          Language of Denim. ___________
-        </p>
       </div>
 
-      {/* Vertical bio text */}
-      <p className="absolute right-4 top-1/2 z-10 hidden max-w-[180px] -translate-y-1/2 text-[11px] leading-relaxed text-white md:block vertical-rl">
+      {/* Right-edge vertical rail #1 — designer bio (mid-right, indented from the edge) */}
+      <p className="vertical-up absolute right-10 top-1/2 z-10 hidden max-h-[60vh] max-w-[180px] -translate-y-1/2 text-[11px] font-medium leading-relaxed text-white md:block">
         I'm Domingo McMahon, creating bespoke, hand-stitched fashion and art that
         stands beyond trends. Explore my world of refined creativity.
+      </p>
+
+      {/* Right-edge vertical rail #2 — far edge tagline (hugging the border) */}
+      <p className="vertical-up absolute bottom-10 right-3 z-10 hidden text-[11px] uppercase tracking-[0.15em] leading-snug text-white md:block">
+        Exploring Art Through the
+        <br />
+        Language of Denim. ___________
       </p>
     </section>
   );
