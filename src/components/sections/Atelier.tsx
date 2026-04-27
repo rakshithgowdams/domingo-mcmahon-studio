@@ -109,12 +109,11 @@ export const Atelier = () => {
             Thoughts, ideas, and perspectives on slow fashion, hand-stitched details,
             and the art of mindful creation.
           </p>
-          <Asterisk color="lime" size={50} className="absolute -bottom-2 left-1/2" />
+          {/* Stage 2F: removed lime decorative — covered by placed Star K */}
         </div>
 
         <div className="relative lg:col-span-7">
-          <Asterisk color="orange" size={48} className="absolute -top-6 right-10 z-10" />
-          <Asterisk color="yellow" size={36} className="absolute bottom-10 -left-4 z-10" />
+          {/* Stage 2F: removed orange + yellow decoratives — covered by placed Star J */}
 
           <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:-space-x-2">
             {posts.map((p, i) => (
