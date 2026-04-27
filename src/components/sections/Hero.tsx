@@ -153,7 +153,7 @@ export const Hero = ({ ready }: HeroProps) => {
       </div>
 
       {/* Bottom captions */}
-      <div className="absolute inset-x-0 bottom-6 z-10 grid grid-cols-2 gap-4 px-4 pr-12 text-white md:bottom-10 md:px-6 md:pr-24">
+      <div className="absolute inset-x-0 bottom-6 z-10 grid grid-cols-2 gap-4 px-6 pr-12 text-white md:bottom-10 md:px-10 md:pr-24">
         <p className="text-[11px] leading-snug md:text-xs">
           Custom Embroidery, Textile Design,
           <br />
