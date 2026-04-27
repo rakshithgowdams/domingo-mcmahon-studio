@@ -115,6 +115,12 @@
     writing-mode: vertical-lr;
     text-orientation: mixed;
   }
+  /* Bottom-to-top vertical text — classic editorial spine placement */
+  .vertical-up {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
 }
 
 @layer utilities {
