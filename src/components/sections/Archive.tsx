@@ -121,8 +121,34 @@ export const Archive = () => {
         </div>
       </div>
 
-      <Asterisk color="yellow" size={24} className="absolute right-12 top-16" />
-      <Asterisk color="pink" size={32} className="absolute bottom-24 right-20 hidden md:block" />
+      {/* Stage 2F: removed loose yellow + pink decoratives in favor of placed Stars C/D/E */}
+
+      {/* Star C — orange, mid-left, parallax */}
+      <BrandStar
+        color="orange"
+        size={70}
+        initialRotation={-10}
+        parallaxSpeed={0.3}
+        className="absolute z-10"
+        style={{ top: "35%", left: "22%" }}
+      />
+      {/* Star D — pink, center */}
+      <BrandStar
+        color="pink"
+        size={55}
+        initialRotation={25}
+        className="absolute z-10"
+        style={{ top: "58%", left: "44%" }}
+      />
+      {/* Star E — blue, large hero accent (hidden on mobile per spec) */}
+      <BrandStar
+        color="blue"
+        size={140}
+        initialRotation={0}
+        rotateSpeed={18}
+        className="absolute z-10 hidden md:block"
+        style={{ top: "20%", right: "15%" }}
+      />
 
       <div className="relative mx-auto max-w-[1400px] px-6 md:pl-16 md:pr-10">
         <div className="mb-10 flex items-center gap-4">
@@ -160,7 +186,7 @@ export const Archive = () => {
               </div>
             </div>
 
-            <Asterisk color="orange" size={60} className="absolute -left-4 top-20" />
+            <BrandStar color="orange" size={60} rotate={false} popInOnScroll={false} className="absolute -left-4 top-20" />
 
             <h2
               ref={headlineRef}
@@ -173,7 +199,7 @@ export const Archive = () => {
               <br />
               In{" "}
               <span className="inline-block align-middle">
-                <Asterisk color="purple" size={48} />
+                <BrandStar color="pink" size={48} rotate={false} popInOnScroll={false} />
               </span>{" "}
               Fabric
             </h2>
@@ -185,7 +211,7 @@ export const Archive = () => {
 
           {/* Services — now interactive tabs */}
           <div className="relative lg:col-span-5 lg:pl-10 lg:pt-12">
-            <Asterisk color="blue" size={70} className="absolute -left-2 -top-6" />
+            <BrandStar color="blue" size={70} rotate={false} popInOnScroll={false} className="absolute -left-2 -top-6" />
             <ul
               role="tablist"
               aria-label="Archive services"
