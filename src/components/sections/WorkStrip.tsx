@@ -47,7 +47,7 @@ export const WorkStrip = () => {
           return Math.max(0, trackWidth - window.innerWidth);
         };
 
-        let distance = getDistance();
+        // distance computed lazily inside the ScrollTrigger config below.
 
         const tween = gsap.to(track, {
           x: () => -getDistance(),
