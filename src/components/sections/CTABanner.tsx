@@ -17,6 +17,7 @@ export const CTABanner = () => {
   useGSAP(
     () => {
       if (!wipeRef.current || !sectionRef.current) return;
+      if (prefersReducedMotion()) return;
       gsap.fromTo(
         wipeRef.current,
         { yPercent: 0 },
@@ -24,6 +25,7 @@ export const CTABanner = () => {
           yPercent: -100,
           ease: "power2.inOut",
           scrollTrigger: {
+            id: "cta-wipe",
             trigger: sectionRef.current,
             start: "top 80%",
             end: "top 20%",
