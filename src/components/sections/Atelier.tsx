@@ -41,6 +41,7 @@ export const Atelier = () => {
 
   useGSAP(
     () => {
+      if (prefersReducedMotion()) return;
       gsap.utils.toArray<HTMLElement>(".atelier-card").forEach((el, i) => {
         gsap.fromTo(
           el,
@@ -51,7 +52,7 @@ export const Atelier = () => {
             duration: 0.9,
             delay: i * 0.1,
             ease: "power3.out",
-            scrollTrigger: { trigger: el, start: "top 90%" },
+            scrollTrigger: { id: `atelier-card-${i}`, trigger: el, start: "top 90%" },
           }
         );
       });
