@@ -2,7 +2,7 @@ import { useState, useRef, type FormEvent } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import SplitType from "split-type";
 import { BrandStar } from "@/components/ui/BrandStar";
 
