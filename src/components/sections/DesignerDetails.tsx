@@ -5,6 +5,11 @@ import portraitBlue from "@/assets/portrait-blue.jpg";
 export const DesignerDetails = () => {
   return (
     <section className="relative bg-background py-24 md:py-32">
+      {/* Scattered hand-placed accents */}
+      <Asterisk color="purple" size={28} className="absolute left-8 top-20" />
+      <Asterisk color="blue" size={44} className="absolute right-10 top-1/3 hidden md:block" />
+      <Asterisk color="lime" size={20} className="absolute bottom-16 left-1/3" />
+
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:px-10 lg:grid-cols-12">
         {/* Left vertical column */}
         <aside className="hidden flex-col items-start gap-8 lg:col-span-2 lg:flex">

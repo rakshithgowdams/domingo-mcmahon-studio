@@ -3,8 +3,13 @@ import portraitBlue from "@/assets/portrait-blue.jpg";
 
 export const ClarityCTA = () => {
   return (
-    <section className="bg-foreground py-24 text-white md:py-40">
-      <div className="px-4 md:px-6">
+    <section className="relative bg-foreground py-24 text-white md:py-40">
+      {/* Scattered hand-placed accents around the headline */}
+      <Asterisk color="yellow" size={32} className="absolute left-10 top-16" />
+      <Asterisk color="lime" size={24} className="absolute bottom-16 right-12" />
+      <Asterisk color="orange" size={20} className="absolute bottom-24 left-1/4 hidden md:block" />
+
+      <div className="relative px-4 md:px-6">
         <h2 className="display text-center text-white" style={{ fontSize: "clamp(64px, 14vw, 240px)", letterSpacing: "-0.045em", lineHeight: "0.85" }}>
           <span className="inline-flex flex-wrap items-center justify-center gap-x-[0.15em]">
             Crafting

@@ -31,7 +31,11 @@ const posts = [
 export const Atelier = () => {
   return (
     <section className="relative bg-surface-warm py-24 md:py-32">
-      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:px-10 lg:grid-cols-12">
+      {/* Scattered hand-placed accents */}
+      <Asterisk color="pink" size={26} className="absolute left-1/2 top-12" />
+      <Asterisk color="blue" size={20} className="absolute bottom-20 right-12 hidden md:block" />
+
+      <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:px-10 lg:grid-cols-12">
         {/* Left headline */}
         <div className="relative lg:col-span-5">
           <span className="pill mb-6 inline-flex">05 Blog</span>
