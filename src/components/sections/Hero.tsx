@@ -32,6 +32,9 @@ export const Hero = () => {
       </div>
 
       {/* Massive headline */}
+      {/* Scattered accent — bottom-left flourish */}
+      <Asterisk color="pink" size={28} className="absolute bottom-32 left-12 z-10 hidden md:block" />
+
       <div className="relative z-10 flex min-h-[calc(100vh-120px)] items-center px-4 md:px-6">
         <motion.h1
           initial={{ opacity: 0, y: 60 }}
