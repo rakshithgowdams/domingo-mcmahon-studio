@@ -187,3 +187,16 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) {
   .click-ripple-dot { display: none; }
 }
+
+/* ===== Keyboard-navigation a11y ===== */
+/* Hide the custom dot cursor while the user is tabbing through the UI so
+   the native focus ring is the sole focus indicator. Toggled by a global
+   keydown/mousedown listener in src/lib/gsap.ts. */
+body.using-keyboard [data-custom-cursor] { display: none; }
+
+/* Visible focus ring for every focusable element. Subtle, on-brand. */
+*:focus-visible {
+  outline: 2px solid hsl(var(--accent-forest));
+  outline-offset: 3px;
+  border-radius: 2px;
+}
