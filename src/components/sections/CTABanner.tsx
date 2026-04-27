@@ -71,7 +71,7 @@ export const CTABanner = () => {
         style={{ bottom: "18%", left: "14%" }}
       />
 
-      <div className="relative z-10 px-4 md:px-6">
+      <div className="relative z-10 px-6 md:px-10">
         <h2
           ref={headlineRef}
           className="display text-center text-white"
