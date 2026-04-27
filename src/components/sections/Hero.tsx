@@ -128,7 +128,7 @@ export const Hero = ({ ready }: HeroProps) => {
       />
 
       {/* Massive headline */}
-      <div className="relative z-10 flex min-h-[calc(100vh-120px)] items-center px-6 md:px-10">
+      <div className="relative z-10 flex min-h-[calc(100vh-120px)] items-center px-6 pb-24 md:px-10 md:pb-28">
         <h1
           ref={headlineRef}
           className="display relative w-full text-white"
