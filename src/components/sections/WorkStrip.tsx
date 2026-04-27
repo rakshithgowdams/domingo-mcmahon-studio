@@ -119,29 +119,45 @@ export const WorkStrip = () => {
   );
 
   return (
-    <section ref={sectionRef} className="relative bg-surface-warm py-20 lg:h-[var(--workstrip-scroll,100vh)] lg:py-0">
-      <div ref={viewportRef} className="lg:flex lg:h-screen lg:overflow-hidden">
-        {/* Header — visible on all sizes */}
-        <div className="mx-auto flex max-w-[1400px] items-end justify-between px-6 pb-10 lg:absolute lg:left-0 lg:right-0 lg:top-10 lg:z-10 lg:pb-0 md:px-10">
-          <div>
-            <PillTag className="mb-4">04.5 Selected Work</PillTag>
-            <h2 className="display text-foreground" style={{ fontSize: "clamp(40px, 7vw, 100px)" }}>
-              The Catalogue
-            </h2>
-          </div>
-          <BrandStar color="lime" size={48} className="hidden md:block" popInOnScroll={false} />
+    <section
+      ref={sectionRef}
+      className="relative bg-surface-warm py-20 lg:h-[var(--workstrip-scroll,100vh)] lg:py-0"
+    >
+      {/* Mobile / tablet header (vertical stack layout) */}
+      <div className="mx-auto mb-10 flex max-w-[1400px] items-end justify-between px-6 md:px-10 lg:hidden">
+        <div>
+          <PillTag className="mb-4">04.5 Selected Work</PillTag>
+          <h2 className="display text-foreground" style={{ fontSize: "clamp(40px, 7vw, 100px)" }}>
+            The Catalogue
+          </h2>
         </div>
+        <BrandStar color="lime" size={48} className="hidden md:block" popInOnScroll={false} />
+      </div>
 
-        {/* Horizontal track on lg+, vertical stack on smaller screens */}
+      <div ref={viewportRef} className="lg:flex lg:h-screen lg:items-center lg:overflow-hidden">
+        {/* Horizontal track on lg+, vertical stack on smaller screens.
+            On lg+ the FIRST child of the track is the header itself, so it
+            scrolls in/out with the cards (no overlap, no clipping). */}
         <div
           ref={trackRef}
-          className="flex flex-col gap-8 px-6 md:px-10 lg:w-max lg:flex-row lg:gap-16 lg:pl-[10vw] lg:pr-[10vw] lg:pt-32 lg:will-change-transform"
+          className="flex flex-col gap-8 px-6 md:px-10 lg:w-max lg:flex-row lg:items-center lg:gap-16 lg:px-0 lg:pl-[8vw] lg:pr-[10vw] lg:will-change-transform"
         >
-          {projects.map((p, i) => (
-            <article
-              key={p.title}
-              className="group relative shrink-0 lg:w-[420px]"
+          {/* Desktop header — first track item, scrolls with the strip */}
+          <div className="hidden shrink-0 lg:block lg:w-[36vw] lg:max-w-[560px] lg:pr-8">
+            <PillTag className="mb-4">04.5 Selected Work</PillTag>
+            <h2
+              className="display text-foreground"
+              style={{ fontSize: "clamp(40px, 6vw, 96px)", lineHeight: 0.95 }}
             >
+              The Catalogue
+            </h2>
+            <div className="mt-8">
+              <BrandStar color="lime" size={56} popInOnScroll={false} />
+            </div>
+          </div>
+
+          {projects.map((p, i) => (
+            <article key={p.title} className="group relative shrink-0 lg:w-[420px]">
               <div className="photo overflow-hidden bg-foreground/5">
                 <img
                   src={p.img}
