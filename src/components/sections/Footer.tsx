@@ -34,6 +34,7 @@ export const Footer = () => {
   // SILHOUETTE — bounce-in character drop from above
   useGSAP(() => {
     if (!headlineRef.current) return;
+    if (prefersReducedMotion()) return;
     const split = new SplitType(headlineRef.current, { types: "chars" });
     if (!split.chars) return;
     gsap.set(split.chars, { y: -150, opacity: 0 });
@@ -43,7 +44,7 @@ export const Footer = () => {
       duration: 1.1,
       stagger: 0.05,
       ease: "bounce.out",
-      scrollTrigger: { trigger: headlineRef.current, start: "top 85%" },
+      scrollTrigger: { id: "footer-silhouette", trigger: headlineRef.current, start: "top 85%" },
     });
     return () => split.revert();
   });
