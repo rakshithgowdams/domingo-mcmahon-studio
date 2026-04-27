@@ -126,7 +126,7 @@ export const Atelier = () => {
                   {p.tag}
                 </span>
                 <div className="relative photo">
-                  <img src={p.img} alt={p.title} loading="lazy" className="h-56 w-full object-cover sm:h-64" />
+                  <img src={p.img} alt={p.title} loading="lazy" decoding="async" className="h-56 w-full object-cover sm:h-64" />
                 </div>
                 <div className="px-2 pb-3 pt-4">
                   <h3 className="display text-xl leading-[0.95] text-foreground sm:text-2xl">{p.title}</h3>
