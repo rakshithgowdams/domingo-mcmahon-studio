@@ -39,6 +39,17 @@ export default function QA() {
     [active]
   );
 
+  // Live ScrollTrigger registry counter — useful for catching leaks while
+  // scrolling. If this number keeps climbing as you scroll up/down repeatedly,
+  // a tween somewhere is creating triggers without cleaning them up.
+  const [stCount, setStCount] = useState(0);
+  useEffect(() => {
+    const tick = () => setStCount(ScrollTrigger.getAll().length);
+    tick();
+    const id = window.setInterval(tick, 500);
+    return () => window.clearInterval(id);
+  }, [active]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Toolbar */}
