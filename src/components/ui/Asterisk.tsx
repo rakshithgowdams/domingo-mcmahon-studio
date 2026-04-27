@@ -124,6 +124,8 @@ export const Asterisk = forwardRef<SVGSVGElement, AsteriskProps>(function Asteri
           }
         );
       }
+
+      return cleanup;
     },
     { scope: ref, dependencies: [spin, reveal] }
   );
