@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { ClickRipple } from "@/components/ui/ClickRipple";
 import Index from "./pages/Index.tsx";
 import QA from "./pages/QA.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -18,6 +19,7 @@ const App = () => (
       <Sonner />
       <SmoothScrollProvider>
         <CustomCursor />
+        <ClickRipple />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
