@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
-import { Asterisk } from "@/components/ui/Asterisk";
+import { BrandStar } from "@/components/ui/BrandStar";
 import { PillTag } from "@/components/ui/PillTag";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useSplitText } from "@/hooks/useSplitText";
@@ -32,9 +32,33 @@ export const Designer = () => {
 
   return (
     <section ref={sectionRef} className="relative bg-background py-24 md:py-32">
-      <Asterisk color="purple" size={28} className="absolute left-8 top-20" />
-      <Asterisk color="blue" size={44} className="absolute right-10 top-1/3 hidden md:block" />
-      <Asterisk color="lime" size={20} className="absolute bottom-16 left-1/3" />
+      {/* Stage 2F: removed loose decoratives in favor of placed Stars F/G/H */}
+
+      {/* Star F — pink, top-right area */}
+      <BrandStar
+        color="pink"
+        size={65}
+        initialRotation={-20}
+        className="absolute z-10"
+        style={{ top: "25%", right: "38%" }}
+      />
+      {/* Star G — orange, lower-left center */}
+      <BrandStar
+        color="orange"
+        size={75}
+        initialRotation={15}
+        className="absolute z-10"
+        style={{ top: "62%", left: "32%" }}
+      />
+      {/* Star H — lime, bottom-left, parallax */}
+      <BrandStar
+        color="lime"
+        size={50}
+        initialRotation={0}
+        parallaxSpeed={0.2}
+        className="absolute z-10"
+        style={{ bottom: "18%", left: "8%" }}
+      />
 
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:px-10 lg:grid-cols-12">
         {/* Left vertical column */}
@@ -62,7 +86,7 @@ export const Designer = () => {
             <span className="relative inline-block pl-8 text-accent-forest md:pl-20">
               Details
               <span className="absolute -top-4 right-0 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-widest text-foreground md:-top-6">
-                Since 2018 <Asterisk color="pink" size={16} />
+                Since 2018 <BrandStar color="pink" size={16} rotate={false} popInOnScroll={false} />
               </span>
             </span>
           </h2>
@@ -74,7 +98,7 @@ export const Designer = () => {
             <div className="designer-photo photo relative col-span-2 mx-auto mt-4 max-w-md" style={{ transform: "rotate(-90deg) scale(0.9)" }}>
               <img src={portraitBlue} alt="Domingo in blue jacket holding daisies" loading="lazy" className="h-full w-full object-cover" />
             </div>
-            <Asterisk color="orange" size={56} className="absolute -bottom-4 left-0" />
+            <BrandStar color="orange" size={56} rotate={false} popInOnScroll={false} className="absolute -bottom-4 left-0" />
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
-import { Asterisk } from "@/components/ui/Asterisk";
+import { BrandStar } from "@/components/ui/BrandStar";
 
 const items = [
   "Bespoke",
@@ -10,7 +10,7 @@ const items = [
   "Slow Fashion",
   "Textile Art",
 ];
-const colors = ["orange", "lime", "pink", "purple", "yellow"] as const;
+const colors = ["orange", "lime", "pink", "blue", "pink-alt"] as const;
 
 /**
  * Infinite horizontal marquee strip with rotating colored asterisks
@@ -63,7 +63,7 @@ export const Marquee = () => {
           <span className="display whitespace-nowrap text-foreground" style={{ fontSize: "clamp(48px, 9vw, 120px)" }}>
             {word}
           </span>
-          <Asterisk color={colors[i % colors.length]} size={56} reveal={false} spin={6} />
+          <BrandStar color={colors[i % colors.length]} size={56} popInOnScroll={false} rotateSpeed={6} />
         </div>
       ))}
     </div>

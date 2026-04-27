@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
-import { Asterisk } from "@/components/ui/Asterisk";
+import { BrandStar } from "@/components/ui/BrandStar";
 import { useSplitText } from "@/hooks/useSplitText";
 import portraitBlue from "@/assets/portrait-blue.jpg";
 
@@ -47,10 +47,29 @@ export const CTABanner = () => {
         className="pointer-events-none absolute inset-0 z-[5] bg-background"
       />
 
-      {/* Scattered hand-placed accents around the headline */}
-      <Asterisk color="yellow" size={32} className="absolute left-10 top-16 z-10" />
-      <Asterisk color="lime" size={24} className="absolute bottom-16 right-12 z-10" />
-      <Asterisk color="orange" size={20} className="absolute bottom-24 left-1/4 z-10 hidden md:block" />
+      {/* Stage 2F: removed loose yellow/lime/orange decoratives in favor of placed Stars L/M */}
+
+      {/* Star L — pink, top-right, glowing on black (hidden on mobile per spec) */}
+      <BrandStar
+        color="pink"
+        size={90}
+        initialRotation={-10}
+        rotateSpeed={10}
+        glow
+        className="absolute z-10 hidden md:block"
+        style={{ top: "22%", right: "18%" }}
+      />
+      {/* Star M — pink-alt, bottom-left, glowing on black */}
+      <BrandStar
+        color="pink-alt"
+        size={110}
+        initialRotation={15}
+        rotateSpeed={12}
+        rotateDirection={-1}
+        glow
+        className="absolute z-10"
+        style={{ bottom: "18%", left: "14%" }}
+      />
 
       <div className="relative z-10 px-4 md:px-6">
         <h2
@@ -61,7 +80,7 @@ export const CTABanner = () => {
           <span className="inline-flex flex-wrap items-center justify-center gap-x-[0.15em]">
             Crafting
             <span className="inline-block align-middle">
-              <Asterisk color="purple" size={72} />
+              <BrandStar color="pink" size={72} rotate={false} popInOnScroll={false} glow />
             </span>
             Clarity
           </span>
@@ -73,7 +92,7 @@ export const CTABanner = () => {
             </span>
             Complexity
             <span className="inline-block align-middle">
-              <Asterisk color="pink" size={72} />
+              <BrandStar color="pink-alt" size={72} rotate={false} popInOnScroll={false} glow />
             </span>
           </span>
         </h2>

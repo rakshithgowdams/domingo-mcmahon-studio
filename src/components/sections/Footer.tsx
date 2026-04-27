@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import SplitType from "split-type";
-import { Asterisk } from "@/components/ui/Asterisk";
+import { BrandStar } from "@/components/ui/BrandStar";
 
 type SubmitStatus = "idle" | "loading" | "success" | "error";
 
@@ -88,7 +88,14 @@ export const Footer = () => {
             </li>
           ))}
         </ul>
-        <Asterisk color="yellow" size={36} className="absolute right-8 top-10" />
+        {/* Star N — orange, in the black left column */}
+        <BrandStar
+          color="orange"
+          size={80}
+          initialRotation={0}
+          className="absolute z-10"
+          style={{ top: "18%", left: "18%" }}
+        />
 
         <div className="mt-12">
           <p className="display text-3xl text-white md:text-4xl">Be Part of<br />The Story</p>
@@ -143,11 +150,17 @@ export const Footer = () => {
 
       {/* Right white column */}
       <div className="relative flex flex-col justify-between bg-background p-8 lg:col-span-7 lg:p-10">
-        <Asterisk color="pink" size={28} className="absolute right-12 top-10" />
-        <Asterisk color="orange" size={20} className="absolute bottom-24 left-12" />
+        {/* Stage 2F: removed loose pink/orange decoratives — covered by placed Stars N/O */}
 
         <div className="relative">
-          <Asterisk color="blue" size={56} className="absolute -left-2 top-2" />
+          {/* Star O — blue, overlapping the S of SILHOUETTE */}
+          <BrandStar
+            color="blue"
+            size={65}
+            initialRotation={15}
+            className="absolute z-10"
+            style={{ bottom: "22%", left: "8%" }}
+          />
           <h2
             ref={headlineRef}
             className="display text-accent-forest"
