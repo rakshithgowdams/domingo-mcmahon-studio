@@ -1,8 +1,69 @@
 import { useState } from "react";
+import { z } from "zod";
+import { toast } from "sonner";
 import { Asterisk } from "../Asterisk";
+
+type SubmitStatus = "idle" | "loading" | "success" | "error";
+
+const emailSchema = z
+  .string()
+  .trim()
+  .min(1, "Please enter your email")
+  .max(255, "Email is too long")
+  .email("Please enter a valid email");
+
+/**
+ * Replace the body of this function with a real API call (edge function,
+ * Mailchimp, Resend, etc.) once a backend is connected. The current
+ * implementation simulates a network round-trip and randomly errors ~10%
+ * of the time so both UI states stay exercised.
+ */
+async function submitSubscription(email: string): Promise<void> {
+  await new Promise((r) => setTimeout(r, 900));
+  if (Math.random() < 0.1) throw new Error("Network error");
+  // For now, persist locally so resubmits with the same email are detected.
+  const stored = JSON.parse(localStorage.getItem("dm_subscribers") ?? "[]") as string[];
+  if (stored.includes(email.toLowerCase())) {
+    throw new Error("You're already subscribed.");
+  }
+  localStorage.setItem("dm_subscribers", JSON.stringify([...stored, email.toLowerCase()]));
+}
 
 export const Footer = () => {
   const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<SubmitStatus>("idle");
+  const [message, setMessage] = useState<string>("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMessage("");
+
+    const parsed = emailSchema.safeParse(email);
+    if (!parsed.success) {
+      setStatus("error");
+      setMessage(parsed.error.issues[0].message);
+      return;
+    }
+
+    setStatus("loading");
+    try {
+      await submitSubscription(parsed.data);
+      setStatus("success");
+      setMessage("You're on the list. Welcome to the archive.");
+      setEmail("");
+      toast.success("Subscribed", { description: "You'll hear from the studio soon." });
+    } catch (err) {
+      setStatus("error");
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setMessage(msg);
+      toast.error("Subscription failed", { description: msg });
+    }
+  };
+
+  const isLoading = status === "loading";
+  const isSuccess = status === "success";
+  const isError = status === "error";
+
   return (
     <footer className="grid grid-cols-1 lg:grid-cols-10">
       {/* Left black column */}
@@ -21,21 +82,50 @@ export const Footer = () => {
           <p className="display text-3xl text-white md:text-4xl">Be Part of<br />The Story</p>
           <p className="mt-3 text-xs text-white/70">Updates on new drops, collaborations, and events.</p>
           <form
-            onSubmit={(e) => { e.preventDefault(); setEmail(""); }}
-            className="mt-4 flex overflow-hidden rounded-full bg-white p-1"
+            onSubmit={handleSubmit}
+            noValidate
+            aria-busy={isLoading}
+            className={`mt-4 flex overflow-hidden rounded-full bg-white p-1 ring-1 transition-colors ${
+              isError ? "ring-accent-pink" : isSuccess ? "ring-accent-lime" : "ring-transparent"
+            }`}
           >
             <input
               type="email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (status !== "idle") {
+                  setStatus("idle");
+                  setMessage("");
+                }
+              }}
+              disabled={isLoading}
+              aria-invalid={isError}
+              aria-describedby="subscribe-feedback"
               placeholder="Email address"
-              className="flex-1 bg-transparent px-4 py-2 text-xs text-foreground outline-none placeholder:text-muted-foreground"
+              className="flex-1 bg-transparent px-4 py-2 text-xs text-foreground outline-none placeholder:text-muted-foreground disabled:opacity-60"
             />
-            <button type="submit" className="rounded-full bg-foreground px-5 py-2 text-xs font-semibold uppercase tracking-wide text-white transition-opacity hover:opacity-80">
-              Subscribe
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="rounded-full bg-foreground px-5 py-2 text-xs font-semibold uppercase tracking-wide text-white transition-opacity hover:opacity-80 disabled:opacity-50"
+            >
+              {isLoading ? "Sending…" : isSuccess ? "Subscribed ✓" : "Subscribe"}
             </button>
           </form>
+
+          {/* Inline feedback — always rendered region for screen readers */}
+          <p
+            id="subscribe-feedback"
+            role="status"
+            aria-live="polite"
+            className={`mt-2 min-h-[1.25rem] text-[11px] leading-snug ${
+              isError ? "text-accent-pink" : isSuccess ? "text-accent-lime" : "text-white/60"
+            }`}
+          >
+            {message}
+          </p>
         </div>
 
         <p className="mt-16 text-[11px] uppercase tracking-[0.25em] text-white/60">Let's Stay Connected</p>
