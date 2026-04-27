@@ -170,7 +170,7 @@ export const Archive = () => {
                 alt={current.alt}
                 loading="lazy"
                 decoding="async"
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full object-cover mx-0 my-0 px-0 pr-px text-left"
               />
               <img
                 ref={overlayImgRef}
