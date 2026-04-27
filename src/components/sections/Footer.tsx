@@ -173,7 +173,7 @@ export const Footer = () => {
         <div className="mt-10">
           <div className="h-px w-full bg-foreground" />
           <div className="flex flex-col items-start justify-between gap-3 pt-4 text-[11px] uppercase tracking-wider text-foreground sm:flex-row sm:items-center">
-            <p>© 2026 Domingo McMahon Portfolio. All rights reserved.</p>
+            <p>© 2026 Developed by @aiwithrakshith. All rights reserved.</p>
             <a href="#" className="story-link">Terms of Service</a>
           </div>
         </div>
