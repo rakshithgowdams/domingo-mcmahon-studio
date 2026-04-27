@@ -80,7 +80,7 @@ export const CTABanner = () => {
           <span className="inline-flex flex-wrap items-center justify-center gap-x-[0.15em]">
             Crafting
             <span className="inline-block align-middle">
-              <Asterisk color="purple" size={72} />
+              <BrandStar color="pink" size={72} rotate={false} popInOnScroll={false} glow />
             </span>
             Clarity
           </span>
@@ -92,7 +92,7 @@ export const CTABanner = () => {
             </span>
             Complexity
             <span className="inline-block align-middle">
-              <Asterisk color="pink" size={72} />
+              <BrandStar color="pink-alt" size={72} rotate={false} popInOnScroll={false} glow />
             </span>
           </span>
         </h2>
