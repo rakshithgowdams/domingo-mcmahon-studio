@@ -56,12 +56,17 @@ export const WorkStrip = () => {
             id: "workstrip-horizontal",
             trigger: section,
             start: "top top",
-            end: () => `+=${getDistance()}`,
+            // Multiply distance for a longer, gentler scroll — the track
+            // travels the same pixels but spread across more scroll, which
+            // removes the "snappy" feel.
+            end: () => `+=${getDistance() * 1.1}`,
             pin: true,
             pinSpacing: true,
-            scrub: 1,
+            // Higher scrub = smoother catch-up easing (was 1 = near-instant).
+            scrub: 1.2,
             invalidateOnRefresh: true,
             anticipatePin: 1,
+            fastScrollEnd: true,
           },
         });
 
