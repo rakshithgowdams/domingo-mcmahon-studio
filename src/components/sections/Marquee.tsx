@@ -13,7 +13,7 @@ const items = [
 const colors = ["orange", "lime", "pink", "blue", "pink-alt"] as const;
 
 /**
- * Infinite horizontal marquee strip with rotating colored asterisks
+ * Infinite horizontal marquee strip with rotating brand stars
  * between words. Uses GSAP for buttery-smooth seamless looping.
  */
 export const Marquee = () => {
