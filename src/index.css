@@ -121,7 +121,39 @@
     text-orientation: mixed;
     transform: rotate(180deg);
   }
+
+  /* Image clip-path reveal — animated by GSAP */
+  .reveal-clip {
+    clip-path: inset(100% 0 0 0);
+    will-change: clip-path;
+  }
+
+  /* Hide scrollbar utility */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
 }
+
+/* ===== Skeleton preloader shimmer ===== */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(0 0% 8%) 0%,
+    hsl(0 0% 18%) 50%,
+    hsl(0 0% 8%) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
 
 @layer utilities {
   .font-display { font-family: 'Anton', 'Bebas Neue', sans-serif; }
