@@ -31,6 +31,7 @@ export const WorkStrip = () => {
       const section = sectionRef.current;
       const track = trackRef.current;
       if (!section || !track) return;
+      if (prefersReducedMotion()) return;
 
       const mm = gsap.matchMedia();
 
