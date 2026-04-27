@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 
 type AsteriskColor =
@@ -30,6 +31,11 @@ interface AsteriskProps {
 /**
  * Reusable 8-petaled flower/asterisk SVG with infinite GSAP rotation
  * and optional ScrollTrigger pop-in.
+ *
+ * Uses useGSAP with a scope so ALL tweens AND their attached
+ * ScrollTriggers are automatically reverted on unmount / dep change.
+ * This prevents the trigger leak that would otherwise accumulate one
+ * orphaned ScrollTrigger per Asterisk instance per Strict-Mode mount.
  */
 export const Asterisk = ({
   color = "orange",
@@ -40,29 +46,50 @@ export const Asterisk = ({
 }: AsteriskProps) => {
   const ref = useRef<SVGSVGElement>(null);
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const tweens: gsap.core.Tween[] = [];
+  useGSAP(
+    () => {
+      const el = ref.current;
+      if (!el) return;
 
-    if (spin > 0) {
-      tweens.push(
-        gsap.to(el, { rotation: 360, duration: spin, repeat: -1, ease: "none" })
-      );
-    }
-    if (reveal) {
-      gsap.set(el, { scale: 0 });
-      tweens.push(
+      // Idempotency guard: if a previous ScrollTrigger was somehow attached
+      // to this exact element (e.g. fast HMR), kill it before creating a new
+      // one. useGSAP's cleanup handles the normal case; this is belt-and-braces.
+      ScrollTrigger.getAll()
+        .filter((st) => st.trigger === el)
+        .forEach((st) => st.kill());
+
+      if (spin > 0) {
         gsap.to(el, {
-          scale: 1,
-          duration: 0.7,
-          ease: "back.out(1.7)",
-          scrollTrigger: { trigger: el, start: "top 90%" },
-        })
-      );
-    }
-    return () => tweens.forEach((t) => t.kill());
-  }, [spin, reveal]);
+          rotation: 360,
+          duration: spin,
+          repeat: -1,
+          ease: "none",
+          // transformOrigin keeps spin centered regardless of layout.
+          transformOrigin: "50% 50%",
+        });
+      }
+
+      if (reveal) {
+        gsap.fromTo(
+          el,
+          { scale: 0 },
+          {
+            scale: 1,
+            duration: 0.7,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 90%",
+              // once: true means the trigger self-disposes after firing,
+              // so it won't sit in the global registry forever.
+              once: true,
+            },
+          }
+        );
+      }
+    },
+    { scope: ref, dependencies: [spin, reveal] }
+  );
 
   return (
     <svg

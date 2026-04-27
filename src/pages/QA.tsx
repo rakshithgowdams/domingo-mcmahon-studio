@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { ScrollTrigger } from "@/lib/gsap";
 import Hero from "@/components/sections/Hero";
 import Marquee from "@/components/sections/Marquee";
 import WorkStrip from "@/components/sections/WorkStrip";
@@ -38,6 +39,17 @@ export default function QA() {
     [active]
   );
 
+  // Live ScrollTrigger registry counter — useful for catching leaks while
+  // scrolling. If this number keeps climbing as you scroll up/down repeatedly,
+  // a tween somewhere is creating triggers without cleaning them up.
+  const [stCount, setStCount] = useState(0);
+  useEffect(() => {
+    const tick = () => setStCount(ScrollTrigger.getAll().length);
+    tick();
+    const id = window.setInterval(tick, 500);
+    return () => window.clearInterval(id);
+  }, [active]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Toolbar */}
@@ -49,6 +61,12 @@ export default function QA() {
           <span className="mx-2 h-4 w-px bg-border" />
           <h1 className="text-sm font-medium">QA Checklist</h1>
           <span className="text-xs text-muted-foreground">{visible.length} section{visible.length === 1 ? "" : "s"}</span>
+          <span
+            title="Live ScrollTrigger count — should stay flat while idle"
+            className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] text-muted-foreground"
+          >
+            ST: {stCount}
+          </span>
 
           <div className="ml-auto flex flex-wrap items-center gap-2">
             <label className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
