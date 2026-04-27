@@ -135,7 +135,8 @@ export const WorkStrip = () => {
                 <img
                   src={p.img}
                   alt={p.title}
-                  loading="lazy"
+                  loading="eager"
+                  decoding="async"
                   className="h-[60vh] w-full object-cover transition-transform duration-700 group-hover:scale-105 lg:h-[600px]"
                 />
               </div>
