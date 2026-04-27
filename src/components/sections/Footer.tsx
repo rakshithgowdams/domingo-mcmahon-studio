@@ -43,6 +43,10 @@ export const Footer = () => {
 
       {/* Right white column */}
       <div className="relative flex flex-col justify-between bg-background p-8 lg:col-span-7 lg:p-10">
+        {/* Scattered hand-placed accents */}
+        <Asterisk color="pink" size={28} className="absolute right-12 top-10" />
+        <Asterisk color="orange" size={20} className="absolute bottom-24 left-12" />
+
         <div className="relative">
           <Asterisk color="blue" size={56} className="absolute -left-2 top-2" />
           <h2

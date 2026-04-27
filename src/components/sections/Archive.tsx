@@ -20,7 +20,11 @@ export const Archive = () => {
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1400px] px-6 md:pl-16 md:pr-10">
+      {/* Scattered hand-placed accents */}
+      <Asterisk color="yellow" size={24} className="absolute right-12 top-16" />
+      <Asterisk color="pink" size={32} className="absolute bottom-24 right-20 hidden md:block" />
+
+      <div className="relative mx-auto max-w-[1400px] px-6 md:pl-16 md:pr-10">
         <div className="mb-10 flex items-center gap-4">
           <span className="pill">02 The Archive</span>
         </div>
