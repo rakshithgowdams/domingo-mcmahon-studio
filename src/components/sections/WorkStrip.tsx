@@ -56,17 +56,17 @@ export const WorkStrip = () => {
             id: "workstrip-horizontal",
             trigger: section,
             start: "top top",
-            // Multiply distance for a longer, gentler scroll — the track
-            // travels the same pixels but spread across more scroll, which
-            // removes the "snappy" feel.
-            end: () => `+=${getDistance() * 1.1}`,
+            // Longer pin distance = the same horizontal travel spread over
+            // more vertical scroll, which feels like a slow editorial glide
+            // instead of a snappy yank.
+            end: () => `+=${getDistance() * 1.5}`,
             pin: true,
             pinSpacing: true,
-            // Higher scrub = smoother catch-up easing (was 1 = near-instant).
-            scrub: 1.2,
+            // scrub: 1.5 = ~1.5s of inertia catching up to the scroll head.
+            // Pairs with Lenis's lerp 0.1 for a buttery, weighted feel.
+            scrub: 1.5,
             invalidateOnRefresh: true,
             anticipatePin: 1,
-            fastScrollEnd: true,
           },
         });
 

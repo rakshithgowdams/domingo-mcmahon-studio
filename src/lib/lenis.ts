@@ -24,29 +24,33 @@ export function createLenis(): Lenis | null {
   if (isMobile || isTouchOnly) return null;
 
   instance = new Lenis({
-    // Use lerp-based smoothing only — mixing `duration` + `lerp` causes
-    // the wheel to feel "rubbery" and produces visible micro-stutters
-    // when ScrollTrigger pins kick in. Lower lerp = snappier, higher = softer.
-    lerp: 0.08,
+    // Softer lerp = more inertia / glide. 0.1 is the Lenis sweet spot for
+    // editorial sites — high enough to feel smooth, low enough that pinned
+    // sections don't drift behind the scroll position.
+    lerp: 0.1,
     smoothWheel: true,
-    wheelMultiplier: 1,
+    wheelMultiplier: 0.9,
     touchMultiplier: 1.5,
     syncTouch: false,
   });
 
+  // Drive ScrollTrigger from Lenis's scroll event so pins/triggers update
+  // on the SAME frame Lenis paints — this is what removes the "stutter".
   instance.on("scroll", ScrollTrigger.update);
 
   gsap.ticker.add((time) => {
     instance?.raf(time * 1000);
   });
+  // lagSmoothing(0) prevents GSAP from "catching up" after a long frame,
+  // which would otherwise cause a visible jump in pinned sections.
   gsap.ticker.lagSmoothing(0);
 
-  // Critical for pinned sections: tells ScrollTrigger to use transform-based
-  // pinning which stays in sync with Lenis instead of jumping on pin start.
+  // Pin via transform so pinned elements ride the same compositor layer
+  // Lenis is translating — eliminates the 1-frame desync at pin boundaries.
   ScrollTrigger.defaults({ pinType: "transform" });
-  // Normalize scroll events — eliminates the iOS/trackpad jitter that
-  // makes pinned horizontal sections feel "glitchy" at the boundaries.
-  ScrollTrigger.normalizeScroll(true);
+  // NOTE: do NOT call ScrollTrigger.normalizeScroll(true) here. It hijacks
+  // wheel/touch events that Lenis is already smoothing, which produces the
+  // exact "sudden glitch" the user is reporting (double-handled input).
   ScrollTrigger.config({ ignoreMobileResize: true });
 
   return instance;
