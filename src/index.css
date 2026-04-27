@@ -166,3 +166,24 @@ html.lenis, html.lenis body { height: auto; }
     to   { transform: rotate(360deg); }
   }
 }
+
+/* ===== Global click ripple feedback (spawned by ClickRipple.tsx) ===== */
+.click-ripple-dot {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 9999px;
+  background: hsl(var(--accent-forest) / 0.30);
+  pointer-events: none;
+  transform: scale(0);
+  animation: click-ripple-anim 0.6s ease-out forwards;
+  will-change: transform, opacity;
+}
+@keyframes click-ripple-anim {
+  0%   { transform: scale(0);  opacity: 0.7; }
+  100% { transform: scale(18); opacity: 0;   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .click-ripple-dot { display: none; }
+}
