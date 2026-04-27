@@ -17,18 +17,18 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <SmoothScrollProvider>
-        <CustomCursor />
-        <ClickRipple />
-        <BrowserRouter>
+      <BrowserRouter>
+        <SmoothScrollProvider>
+          <CustomCursor />
+          <ClickRipple />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/qa" element={<QA />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
-      </SmoothScrollProvider>
+        </SmoothScrollProvider>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
