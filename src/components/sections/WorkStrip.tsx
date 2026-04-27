@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { Asterisk } from "@/components/ui/Asterisk";
+import { BrandStar } from "@/components/ui/BrandStar";
 import { PillTag } from "@/components/ui/PillTag";
 import work1 from "@/assets/work-1.jpg";
 import work2 from "@/assets/work-2.jpg";
@@ -117,7 +117,7 @@ export const WorkStrip = () => {
             The Catalogue
           </h2>
         </div>
-        <Asterisk color="forest" size={48} className="hidden md:block" />
+        <BrandStar color="lime" size={48} className="hidden md:block" popInOnScroll={false} />
       </div>
 
       {/* Horizontal track on lg+, vertical stack on smaller screens */}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { gsap } from "@/lib/gsap";
-import { Asterisk } from "@/components/ui/Asterisk";
+import { BrandStar } from "@/components/ui/BrandStar";
 
 interface PreloaderProps {
   /** Called once the exit animation finishes. Optional so the component
@@ -95,7 +95,7 @@ export const Preloader = ({ onComplete, hold = 1.4 }: PreloaderProps) => {
 
           {/* Asterisk centered horizontally on bottom baseline */}
           <div className="flex items-center justify-center pb-1">
-            <Asterisk color="forest" size={48} reveal={false} spin={2} />
+            <BrandStar color="lime" size={48} popInOnScroll={false} rotateSpeed={2} />
           </div>
 
           <div className="hidden space-y-2 text-right md:block">
