@@ -178,7 +178,7 @@ export const Archive = () => {
                 alt=""
                 aria-hidden="true"
                 decoding="async"
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full object-cover mx-0 my-0 px-0 pr-px text-left"
                 style={{ clipPath: "inset(100% 0 0 0)", opacity: 0 }}
               />
               {/* Hidden preloaders so tab swaps don't wait on the network */}
