@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { BrandStar } from "@/components/ui/BrandStar";
 import { useSplitText } from "@/hooks/useSplitText";
 import portraitBlue from "@/assets/portrait-blue.jpg";
