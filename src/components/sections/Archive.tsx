@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { Asterisk } from "@/components/ui/Asterisk";
@@ -8,34 +8,109 @@ import archive1 from "@/assets/archive-1.jpg";
 import archive2 from "@/assets/archive-2.jpg";
 import archive3 from "@/assets/archive-3.jpg";
 
+// Each service is now a tab — clicking its number swaps the left photo
+// with an animated wipe. `image` + `caption` drive the hero panel.
 const services = [
-  { n: "1", label: "Luxury Bespoke Tailoring", muted: false },
-  { n: "2", label: "Exclusive Fabric Art", muted: true },
-  { n: "3", label: "Fashion Editorial Direction", muted: true },
-];
+  {
+    n: "1",
+    label: "Luxury Bespoke Tailoring",
+    image: archive1,
+    alt: "Embroidered denim jacket editorial",
+    caption: "Hand-stitched wearable art and custom threads.",
+  },
+  {
+    n: "2",
+    label: "Exclusive Fabric Art",
+    image: archive2,
+    alt: "Bespoke tailoring with textile art",
+    caption: "Painted, dyed and overstitched textile compositions.",
+  },
+  {
+    n: "3",
+    label: "Fashion Editorial Direction",
+    image: archive3,
+    alt: "Hand-stitched fabric texture detail",
+    caption: "Concept-to-shoot direction for editorial features.",
+  },
+] as const;
 
 export const Archive = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useSplitText<HTMLHeadingElement>({ stagger: 0.025 });
 
-  // Image clip-path reveals
+  // Active tab state.
+  const [active, setActive] = useState(0);
+
+  // Refs for the swap animation. We keep TWO stacked <img> layers and
+  // cross-fade between them so the new image can wipe in over the old.
+  const photoWrapRef = useRef<HTMLDivElement>(null);
+  const baseImgRef = useRef<HTMLImageElement>(null);
+  const overlayImgRef = useRef<HTMLImageElement>(null);
+  const captionRef = useRef<HTMLParagraphElement>(null);
+
+  // Initial entry reveal — clip-path wipe on first scroll-in.
   useGSAP(
     () => {
-      gsap.utils.toArray<HTMLElement>(".archive-photo").forEach((el) => {
-        gsap.fromTo(
-          el,
-          { clipPath: "inset(100% 0 0 0)" },
-          {
-            clipPath: "inset(0% 0 0 0)",
-            duration: 1.1,
-            ease: "power3.out",
-            scrollTrigger: { trigger: el, start: "top 85%" },
-          }
-        );
-      });
+      if (!photoWrapRef.current) return;
+      gsap.fromTo(
+        photoWrapRef.current,
+        { clipPath: "inset(100% 0 0 0)" },
+        {
+          clipPath: "inset(0% 0 0 0)",
+          duration: 1.1,
+          ease: "power3.out",
+          scrollTrigger: { trigger: photoWrapRef.current, start: "top 85%" },
+        }
+      );
     },
     { scope: sectionRef }
   );
+
+  // Click handler — animate the swap. We:
+  //   1. Set the OVERLAY <img> src to the new image.
+  //   2. Clip-path-wipe the overlay in from the bottom (fast, 0.7s).
+  //   3. After the wipe, copy the overlay's src onto the BASE layer and
+  //      reset the overlay's clip — ready for the next swap.
+  //   4. Cross-fade the caption text in parallel.
+  const handleSelect = (idx: number) => {
+    if (idx === active) return;
+    setActive(idx);
+
+    const baseEl = baseImgRef.current;
+    const overlayEl = overlayImgRef.current;
+    const next = services[idx];
+    if (!baseEl || !overlayEl) return;
+
+    // Prep overlay for the wipe.
+    overlayEl.src = next.image;
+    overlayEl.alt = next.alt;
+
+    const tl = gsap.timeline();
+    tl.set(overlayEl, { clipPath: "inset(100% 0 0 0)", scale: 1.08, opacity: 1 })
+      .to(overlayEl, {
+        clipPath: "inset(0% 0 0 0)",
+        scale: 1,
+        duration: 0.75,
+        ease: "power3.out",
+      })
+      .add(() => {
+        // Promote overlay → base, reset overlay so it's ready next time.
+        baseEl.src = next.image;
+        baseEl.alt = next.alt;
+        gsap.set(overlayEl, { clipPath: "inset(100% 0 0 0)", opacity: 0 });
+      });
+
+    // Caption fade.
+    if (captionRef.current) {
+      gsap.fromTo(
+        captionRef.current,
+        { y: 12, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, ease: "power2.out", delay: 0.15 }
+      );
+    }
+  };
+
+  const current = services[active];
 
   return (
     <section ref={sectionRef} className="relative bg-background py-24 md:py-32">
@@ -55,17 +130,33 @@ export const Archive = () => {
         </div>
 
         <div className="grid gap-12 lg:grid-cols-12">
-          {/* Photo collage */}
+          {/* Hero photo panel — swapped via tab clicks */}
           <div className="relative lg:col-span-7">
-            <div className="grid grid-cols-6 gap-4">
-              <div className="archive-photo col-span-3 photo" style={{ transform: "rotate(-2deg)" }}>
-                <img src={archive1} alt="Embroidered denim jacket editorial" loading="lazy" className="h-full w-full object-cover" />
-              </div>
-              <div className="archive-photo col-span-3 mt-12 photo" style={{ transform: "rotate(2deg)" }}>
-                <img src={archive2} alt="Bespoke tailoring with textile art" loading="lazy" className="h-full w-full object-cover" />
-              </div>
-              <div className="archive-photo col-span-4 col-start-2 photo" style={{ transform: "rotate(-1deg)" }}>
-                <img src={archive3} alt="Hand-stitched fabric texture detail" loading="lazy" className="h-full w-full object-cover" />
+            <div
+              ref={photoWrapRef}
+              className="photo relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-muted"
+              style={{ willChange: "clip-path" }}
+              aria-live="polite"
+            >
+              <img
+                ref={baseImgRef}
+                src={current.image}
+                alt={current.alt}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <img
+                ref={overlayImgRef}
+                src={current.image}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full object-cover"
+                style={{ clipPath: "inset(100% 0 0 0)", opacity: 0 }}
+              />
+              {/* Floating active-index badge */}
+              <div className="pointer-events-none absolute left-4 top-4 flex items-center gap-2 rounded-full bg-foreground/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-background">
+                <span>0{current.n}</span>
+                <span className="opacity-60">{current.label}</span>
               </div>
             </div>
 
@@ -87,26 +178,54 @@ export const Archive = () => {
               Fabric
             </h2>
 
-            <p className="mt-6 max-w-md text-sm text-muted-foreground">
-              Hand-stitched wearable art and custom threads.
+            <p ref={captionRef} className="mt-6 max-w-md text-sm text-muted-foreground">
+              {current.caption}
             </p>
           </div>
 
-          {/* Services */}
+          {/* Services — now interactive tabs */}
           <div className="relative lg:col-span-5 lg:pl-10 lg:pt-12">
             <Asterisk color="blue" size={70} className="absolute -left-2 -top-6" />
-            <ul className="space-y-6 border-t border-foreground">
-              {services.map((s) => (
-                <li
-                  key={s.n}
-                  className={`flex items-baseline gap-6 border-b border-foreground/20 pb-6 pt-6 ${
-                    s.muted ? "text-muted-foreground" : "text-foreground"
-                  }`}
-                >
-                  <span className="display text-4xl md:text-5xl">{s.n}</span>
-                  <span className="display text-2xl md:text-3xl">{s.label}</span>
-                </li>
-              ))}
+            <ul
+              role="tablist"
+              aria-label="Archive services"
+              className="space-y-6 border-t border-foreground"
+            >
+              {services.map((s, i) => {
+                const isActive = i === active;
+                return (
+                  <li key={s.n} className="border-b border-foreground/20">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      data-cursor="hover"
+                      onClick={() => handleSelect(i)}
+                      className={`group flex w-full items-baseline gap-6 py-6 text-left transition-all duration-300 ${
+                        isActive
+                          ? "translate-x-2 text-foreground"
+                          : "text-muted-foreground hover:translate-x-1 hover:text-foreground"
+                      }`}
+                    >
+                      <span
+                        className={`display text-4xl tabular-nums transition-colors duration-300 md:text-5xl ${
+                          isActive ? "text-accent-orange" : ""
+                        }`}
+                      >
+                        {s.n}
+                      </span>
+                      <span className="display text-2xl md:text-3xl">{s.label}</span>
+                      {/* Active indicator dash */}
+                      <span
+                        aria-hidden="true"
+                        className={`ml-auto h-px self-center bg-foreground transition-all duration-500 ${
+                          isActive ? "w-10 opacity-100" : "w-0 opacity-0"
+                        }`}
+                      />
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
             <div className="mt-10">
               <PillTag>03 Service</PillTag>
