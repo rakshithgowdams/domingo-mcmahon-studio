@@ -200,3 +200,16 @@ body.using-keyboard [data-custom-cursor] { display: none; }
   outline-offset: 3px;
   border-radius: 2px;
 }
+
+/* ===== Performance: defer offscreen image rendering =====
+   `content-visibility: auto` lets the browser skip layout/paint for images
+   that are far outside the viewport, cutting initial render cost. */
+img {
+  content-visibility: auto;
+}
+
+/* Mark animated elements explicitly so the compositor can promote them
+   ahead of time. Removed via inline style in JS once a tween settles. */
+.animate-on-scroll {
+  will-change: transform, opacity;
+}
