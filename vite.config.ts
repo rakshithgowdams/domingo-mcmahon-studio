@@ -24,4 +24,17 @@ export default defineConfig(({ mode }) => ({
     },
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
   },
+  // Split heavy animation libs into their own chunks so they cache
+  // independently of app code on subsequent visits.
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          gsap: ["gsap", "@gsap/react"],
+          motion: ["framer-motion"],
+          lenis: ["lenis"],
+        },
+      },
+    },
+  },
 }));
