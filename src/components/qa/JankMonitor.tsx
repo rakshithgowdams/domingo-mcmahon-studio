@@ -212,7 +212,7 @@ export const JankMonitor = () => {
           </button>
         </div>
         <div className="mb-1.5 text-[9px] text-foreground/60">
-          Threshold: >{THRESHOLD_MS}ms · Scroll the page · Press J to toggle
+          {"Threshold: >"}{THRESHOLD_MS}ms · Scroll the page · Press J to toggle
         </div>
         {entries.length === 0 ? (
           <div className="text-foreground/50">No janks detected yet ✓</div>
