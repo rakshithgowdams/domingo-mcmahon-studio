@@ -88,7 +88,7 @@ export const CTABanner = () => {
           <span className="inline-flex flex-wrap items-center justify-center gap-x-[0.15em]">
             From
             <span className="inline-block h-[0.7em] w-[0.7em] overflow-hidden rounded-full align-middle">
-              <img src={portraitBlue} alt="Designer portrait" loading="lazy" className="h-full w-full object-cover" />
+              <img src={portraitBlue} alt="Designer portrait" loading="lazy" decoding="async" className="h-full w-full object-cover" />
             </span>
             Complexity
             <span className="inline-block align-middle">
