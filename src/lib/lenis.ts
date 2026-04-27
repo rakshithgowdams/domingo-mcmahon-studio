@@ -24,10 +24,14 @@ export function createLenis(): Lenis | null {
   if (isMobile || isTouchOnly) return null;
 
   instance = new Lenis({
-    duration: 1.2,
-    easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    // Use lerp-based smoothing only — mixing `duration` + `lerp` causes
+    // the wheel to feel "rubbery" and produces visible micro-stutters
+    // when ScrollTrigger pins kick in. Lower lerp = snappier, higher = softer.
+    lerp: 0.08,
     smoothWheel: true,
-    lerp: 0.1,
+    wheelMultiplier: 1,
+    touchMultiplier: 1.5,
+    syncTouch: false,
   });
 
   instance.on("scroll", ScrollTrigger.update);
@@ -36,6 +40,14 @@ export function createLenis(): Lenis | null {
     instance?.raf(time * 1000);
   });
   gsap.ticker.lagSmoothing(0);
+
+  // Critical for pinned sections: tells ScrollTrigger to use transform-based
+  // pinning which stays in sync with Lenis instead of jumping on pin start.
+  ScrollTrigger.defaults({ pinType: "transform" });
+  // Normalize scroll events — eliminates the iOS/trackpad jitter that
+  // makes pinned horizontal sections feel "glitchy" at the boundaries.
+  ScrollTrigger.normalizeScroll(true);
+  ScrollTrigger.config({ ignoreMobileResize: true });
 
   return instance;
 }
