@@ -32,16 +32,16 @@ export const Hero = () => {
       </div>
 
       {/* Massive headline */}
-      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-120px)] max-w-[1400px] items-center px-6 md:px-10">
+      <div className="relative z-10 flex min-h-[calc(100vh-120px)] items-center px-4 md:px-6">
         <motion.h1
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="display relative text-white"
-          style={{ fontSize: "clamp(64px, 14vw, 220px)" }}
+          className="display relative w-full text-white"
+          style={{ fontSize: "clamp(72px, 17vw, 260px)", letterSpacing: "-0.045em", lineHeight: "0.85" }}
         >
           <span className="relative inline-block">
-            <Asterisk color="orange" size={48} className="absolute -left-4 -top-2 md:-left-6 md:-top-4" />
+            <Asterisk color="orange" size={56} className="absolute -left-5 -top-3 md:-left-8 md:-top-6" />
             Tailored for
           </span>
           <br />
@@ -49,7 +49,7 @@ export const Hero = () => {
           <br />
           <span className="relative inline-block">
             Expression.
-            <Asterisk color="lime" size={56} className="absolute -bottom-2 -right-6 md:-bottom-4 md:-right-10" />
+            <Asterisk color="lime" size={64} className="absolute -bottom-3 -right-8 md:-bottom-5 md:-right-12" />
           </span>
         </motion.h1>
       </div>

@@ -4,22 +4,24 @@ import portraitBlue from "@/assets/portrait-blue.jpg";
 export const ClarityCTA = () => {
   return (
     <section className="bg-foreground py-24 text-white md:py-40">
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-        <h2 className="display text-center text-white" style={{ fontSize: "clamp(56px, 12vw, 200px)" }}>
-          Crafting{" "}
-          <span className="inline-block align-middle">
-            <Asterisk color="purple" size={56} />
-          </span>{" "}
-          Clarity
+      <div className="px-4 md:px-6">
+        <h2 className="display text-center text-white" style={{ fontSize: "clamp(64px, 14vw, 240px)", letterSpacing: "-0.045em", lineHeight: "0.85" }}>
+          <span className="inline-flex flex-wrap items-center justify-center gap-x-[0.15em]">
+            Crafting
+            <span className="inline-block align-middle">
+              <Asterisk color="purple" size={72} />
+            </span>
+            Clarity
+          </span>
           <br />
-          <span className="inline-flex flex-wrap items-center justify-center gap-4">
+          <span className="inline-flex flex-wrap items-center justify-center gap-x-[0.15em]">
             From
-            <span className="inline-block h-16 w-16 overflow-hidden rounded-full align-middle md:h-24 md:w-24">
+            <span className="inline-block h-[0.7em] w-[0.7em] overflow-hidden rounded-full align-middle">
               <img src={portraitBlue} alt="Designer portrait" loading="lazy" className="h-full w-full object-cover" />
             </span>
             Complexity
             <span className="inline-block align-middle">
-              <Asterisk color="pink" size={56} />
+              <Asterisk color="pink" size={72} />
             </span>
           </span>
         </h2>

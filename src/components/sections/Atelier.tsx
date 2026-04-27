@@ -35,7 +35,7 @@ export const Atelier = () => {
         {/* Left headline */}
         <div className="relative lg:col-span-5">
           <span className="pill mb-6 inline-flex">05 Blog</span>
-          <h2 className="display text-foreground" style={{ fontSize: "clamp(48px, 9vw, 130px)" }}>
+          <h2 className="display text-foreground" style={{ fontSize: "clamp(56px, 13vw, 180px)", letterSpacing: "-0.04em", lineHeight: "0.85" }}>
             Latest
             <br />
             Insights

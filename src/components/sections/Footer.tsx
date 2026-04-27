@@ -47,7 +47,7 @@ export const Footer = () => {
           <Asterisk color="blue" size={56} className="absolute -left-2 top-2" />
           <h2
             className="display text-accent-forest"
-            style={{ fontSize: "clamp(80px, 18vw, 280px)", lineHeight: "0.85" }}
+            style={{ fontSize: "clamp(96px, 22vw, 360px)", lineHeight: "0.82", letterSpacing: "-0.05em" }}
           >
             Silhouette
           </h2>
