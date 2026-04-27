@@ -87,7 +87,7 @@ export const Hero = ({ ready }: HeroProps) => {
         decoding="async"
         // @ts-expect-error - fetchpriority is a valid HTML attribute
         fetchpriority="high"
-        className="absolute inset-0 h-full w-full object-cover will-change-transform"
+        className="absolute inset-0 h-full w-full object-cover mx-0 my-0 px-0 pr-px text-left will-change-transform"
       />
       <div className="absolute inset-0 bg-foreground/15" />
 

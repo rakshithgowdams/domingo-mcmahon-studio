@@ -93,10 +93,10 @@ export const Designer = () => {
 
           <div className="relative mt-12 grid grid-cols-2 gap-6">
             <div className="designer-photo photo col-start-2" style={{ transform: "rotate(3deg)" }}>
-              <img src={portraitPurple} alt="Domingo in purple striped suit against sky" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+              <img src={portraitPurple} alt="Domingo in purple striped suit against sky" loading="lazy" decoding="async" className="h-full w-full object-cover mx-0 my-0 px-0 pr-px text-left" />
             </div>
             <div className="designer-photo photo relative col-span-2 mx-auto mt-4 max-w-md" style={{ transform: "rotate(-90deg) scale(0.9)" }}>
-              <img src={portraitBlue} alt="Domingo in blue jacket holding daisies" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+              <img src={portraitBlue} alt="Domingo in blue jacket holding daisies" loading="lazy" decoding="async" className="h-full w-full object-cover mx-0 my-0 px-0 pr-px text-left" />
             </div>
             <BrandStar color="orange" size={56} rotate={false} popInOnScroll={false} className="absolute -bottom-4 left-0" />
           </div>
