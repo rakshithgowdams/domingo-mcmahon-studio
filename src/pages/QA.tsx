@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { ScrollTrigger } from "@/lib/gsap";
 import Hero from "@/components/sections/Hero";
 import Marquee from "@/components/sections/Marquee";
 import WorkStrip from "@/components/sections/WorkStrip";
