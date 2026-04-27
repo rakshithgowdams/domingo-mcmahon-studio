@@ -62,8 +62,11 @@ export const Asterisk = forwardRef<SVGSVGElement, AsteriskProps>(function Asteri
         .filter((st) => st.trigger === el)
         .forEach((st) => st.kill());
 
+      let spinTween: gsap.core.Tween | null = null;
+      let io: IntersectionObserver | null = null;
+
       if (spin > 0 && !reduced) {
-        gsap.to(el, {
+        spinTween = gsap.to(el, {
           rotation: 360,
           duration: spin,
           repeat: -1,
@@ -71,7 +74,37 @@ export const Asterisk = forwardRef<SVGSVGElement, AsteriskProps>(function Asteri
           // transformOrigin keeps spin centered regardless of layout.
           transformOrigin: "50% 50%",
         });
+
+        // PERF: pause the infinite spin whenever the asterisk is off-screen.
+        // The page has ~30 asterisks; without this gate every single one
+        // would keep mutating its transform every frame, causing visible
+        // scroll jank. IntersectionObserver fires only on visibility change,
+        // so the per-frame cost drops to "asterisks currently in viewport".
+        if (typeof IntersectionObserver !== "undefined") {
+          io = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (entry.isIntersecting) spinTween?.play();
+                else spinTween?.pause();
+              }
+            },
+            { rootMargin: "100px" } // small buffer so spin resumes just before scroll-in
+          );
+          io.observe(el);
+          // Start paused if the element isn't already on-screen at mount.
+          const rect = el.getBoundingClientRect();
+          const onScreen =
+            rect.bottom > -100 &&
+            rect.top < (window.innerHeight || 0) + 100;
+          if (!onScreen) spinTween.pause();
+        }
       }
+
+      // Return cleanup so the observer is disconnected when useGSAP reverts.
+      // (useGSAP also kills spinTween automatically as part of context cleanup.)
+      const cleanup = () => {
+        io?.disconnect();
+      };
 
       if (reveal && !reduced) {
         gsap.fromTo(
