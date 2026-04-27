@@ -61,9 +61,9 @@
   * {
     @apply border-border;
   }
-  html {
-    scroll-behavior: smooth;
-  }
+  /* NOTE: native `scroll-behavior: smooth` removed — it conflicts with Lenis
+     on programmatic scrolls (anchors, lenis.scrollTo). Lenis provides smooth
+     scrolling app-wide via SmoothScrollProvider. */
   body {
     @apply bg-background text-foreground font-body antialiased;
   }
