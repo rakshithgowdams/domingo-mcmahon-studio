@@ -86,7 +86,7 @@ export const Designer = () => {
             <span className="relative inline-block pl-8 text-accent-forest md:pl-20">
               Details
               <span className="absolute -top-4 right-0 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-widest text-foreground md:-top-6">
-                Since 2018 <Asterisk color="pink" size={16} />
+                Since 2018 <BrandStar color="pink" size={16} rotate={false} popInOnScroll={false} />
               </span>
             </span>
           </h2>
@@ -98,7 +98,7 @@ export const Designer = () => {
             <div className="designer-photo photo relative col-span-2 mx-auto mt-4 max-w-md" style={{ transform: "rotate(-90deg) scale(0.9)" }}>
               <img src={portraitBlue} alt="Domingo in blue jacket holding daisies" loading="lazy" className="h-full w-full object-cover" />
             </div>
-            <Asterisk color="orange" size={56} className="absolute -bottom-4 left-0" />
+            <BrandStar color="orange" size={56} rotate={false} popInOnScroll={false} className="absolute -bottom-4 left-0" />
           </div>
         </div>
 
